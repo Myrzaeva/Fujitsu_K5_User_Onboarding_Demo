@@ -10,14 +10,14 @@ def index():
                            user=user)
 
 @app.route('/adduser')
-def index():
+def adduser():
     user = {'username': 'landg'}  # fake user
     return render_template('hello-flask-adduser.html',
                            title='K5 Add User',
                            user=user)
 
 @app.route('/userstatus')
-def index():
+def userstatus():
     user = {'username': 'landg'}  # fake user
     return render_template('hello-flask-result.html',
                            title='K5 User Status',
