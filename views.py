@@ -2,7 +2,7 @@ from flask import render_template
 from app import app
 
 @app.route('/')
-@app.route('/index')
+@app.route('/login')
 def index():
     user = {'username': 'landg'}  # fake user
     return render_template('hello-flask-login.html',
