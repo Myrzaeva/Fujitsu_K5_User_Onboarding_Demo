@@ -1,46 +1,18 @@
 {% extends "hello-flask-base.html" %}
 {% block content %}
-  <div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-3">
-      <form role="form">
-        <div class="form-group">
-
-          <label for="k5region">
-            Region
-          </label>
-          <input type="text" class="form-control" id="k5region">
-        </div>
-        <div class="form-group">
-
-          <label for="k5user">
-            User
-          </label>
-          <input type="text" class="form-control" id="k5user">
-        </div>
-      </form>
-    </div>
-    <div class="col-md-3">
-          <form role="form">
-                <div class="form-group">
-
-                      <label for="k5contract">
-                                Contract name
-                      </label>
-                      <input type="text" class="form-control" id="k5contract">
-                </div>
-                <div class="form-group">
-
-                      <label for="k5password">
-                               Password
-                      </label>
-                      <input type="password" class="form-control" id="k5password">
-                </div>
-            </form>
-    </div>
-    <div class="col-md-3">
-    </div>
-  </div>
+<form method="post">
+    <label for="k5username">Username:</label>
+    <input id="k5username" name="k5username" type="text">
+    <br/>
+    <label for="k5password">Password:</label>
+    <input id="k5password" name="k5password" type="password">
+    <br/>
+    <label for="k5region">Region:</label>
+    <input id="k5region" name="k5region" type="text">
+    <br/>
+    <label for="k5contract">Contract:</label>
+    <input id="k5contract" name="k5contract" type="text">
+    <br/>
+    <button>Go!</button>
+</form>
 {% endblock %}
-i
