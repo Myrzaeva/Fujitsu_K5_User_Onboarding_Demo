@@ -1,48 +1,13 @@
 {% extends "hello-flask-base.html" %}
 {% block content %}
-  <div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-3">
-      <form role="form">
-        <div class="form-group">
-
-          <label for="newuser">
-            User Email Address
-          </label>
-          <input type="email" class="form-control" id="newuser">
-        </div>
-      </form>
-    </div>
-    <div class="col-md-3">
-      <form role="form">
-        <div class="form-group">
-
-          <label for="userproject">
-            User Project
-          </label>
-          <input type="email" class="form-control" id="userproject">
-        </div>
-      </form>
-    </div>
-    <div class="col-md-3">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-3">
-
-      <button type="button" class="btn btn-default">
-        Add User
-      </button>
-      <button type="button" class="btn btn-default">
-        Cancel
-      </button>
-    </div>
-    <div class="col-md-3">
-    </div>
-  </div>
+ <form method="post">
+    <label for="k5useremail">User Email Address:</label>
+    <input id="k5useremail" name="k5useremail" type="text">
+    <br/>
+    <label for="k5project">User Project:</label>
+    <input id="k5project" name="k5project" type="password">
+    <br/>
+    <input name="AddUser" type="submit" class="btn btn-primary btn-large" value="Add User">
+    <input name="Logout" type="submit" class="btn btn-primary btn-large" value="Logout">
+</form>
 {% endblock %}

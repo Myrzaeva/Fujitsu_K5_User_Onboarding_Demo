@@ -26,12 +26,35 @@ def index():
                            title='K5 Admin Portal (Beta)')
 
 
-@app.route('/adduser')
+@app.route('/adduser',methods=['GET','POST'])
 def adduser():
+  if request.method == 'POST':
+    if request.form.get('AddUser', None) == "Add User":
+      return redirect(url_for('userstatus'))
+    else:
+      if request.form.get('Logout', None) == "Logout":
+        return redirect(url_for('logout'))
+
+  if request.method == 'GET':
     return render_template('hello-flask-adduser.html',
                            title='K5 Add User')
 
-@app.route('/userstatus')
+@app.route('/userstatus',methods=['GET','POST'])
 def userstatus():
+  if request.method == 'POST':
+    if request.form.get('AddUser', None) == "Add Another User":
+      return redirect(url_for('adduser'))
+    else:
+      if request.form.get('Logout', None) == "Logout":
+        return redirect(url_for('logout'))
+
+  if request.method == 'GET':
     return render_template('hello-flask-result.html',
-                           title='K5 User Status')
+                           title='K5 New User Details',
+                           userstatus = 'Put Results From New User Here!')
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+  session.pop('username', None)
+  return redirect(url_for('index'))

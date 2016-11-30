@@ -1,44 +1,22 @@
 {% extends "hello-flask-base.html" %}
 {% block content %}
-
   <div class="row">
     <div class="col-md-4">
     </div>
     <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            Add User Status
-          </h3>
-        </div>
-        <div class="panel-body">
-          Panel content
-        </div>
-        <div class="panel-footer">
-          Panel footer
-        </div>
+      <div class="jumbotron">
+         <p>
+         {{ userstatus }}
+        </p>
+        <p>
+         <form method="post">
+          <input name="AddUser" type="submit" class="btn btn-primary btn-large" value="Add Another User">
+          <input name="Logout" type="submit" class="btn btn-primary btn-large" value="Logout">
+        </form>
       </div>
     </div>
     <div class="col-md-4">
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-3">
-
-      <button type="button" class="btn btn-default">
-        Add Another User
-      </button>
-      <button type="button" class="btn btn-default">
-        Exit
-      </button>
-    </div>
-    <div class="col-md-3">
-    </div>
-  </div>
-
 {% endblock %}
 
