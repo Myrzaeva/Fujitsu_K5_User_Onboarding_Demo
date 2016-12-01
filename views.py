@@ -1,19 +1,35 @@
 from flask import render_template, session, request, redirect, url_for
 from app import app
 import os
+import AddUserToProjectv2 as K5User
+import k5APIwrappersV1 as K5API
+#from k5contractsettingsV1 import *
+global adminUser
+global adminPassword
+global contract
+global region
 
 app.secret_key = os.urandom(24)
 
 @app.route('/login', methods=['GET','POST'])
 def index():
+
+
    if request.method == 'POST':
      session.pop('user',None)
-
-
+     adminUser =  request.form.get('k5username',None)
+     adminPassword = request.form.get('k5password',None)
+     contract = request.form.get('k5contract',None)
+     region = request.form.get('k5region',None)
+     print region
+     result = K5API.get_unscoped_token()
+     print result
      session['user'] =  request.form['k5username']
      session['password'] = request.form['k5password']
      session['contract'] = request.form['k5contract']
      session['region'] = request.form['k5region']
+
+
 
      if session['password']  == 'password':
        return redirect(url_for('adduser'))

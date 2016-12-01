@@ -60,40 +60,8 @@ def breakdown_user_from_email(useremail):
     password = get_password()
     return (firstname,surname,username,useremail,password)
 
+def adduser_to_K5(email,userProject)
 
-def main():
-    """Summary
-
-    Returns:
-        TYPE: Description
-    """
-    try:
-
-
-        # ensure minimium commandline paramaters have been supplied
-        if (len(sys.argv)<3):
-            print("Usage1: %s -u 'user_email_address' -p 'project_name'" % sys.argv[0])
-            sys.exit(2)
-
-        # load the command line parameters
-        myopts, args = getopt.getopt(sys.argv[1:],"u:p:",["user_email_address=","project_name="])
-    except getopt.GetoptError:
-        # if the parameters are incorrect display error message
-        print("Usage2: %s -u 'user_email_address' -p 'project_name'" % sys.argv[0])
-        sys.exit(2)
-
-    #tester = [('graham.land@uk.fujitsu.com','iCloud18')   ]
-    ###############################
-    # o == option
-    # a == argument passed to the o
-    ###############################
-    for o, a in myopts:
-        if o in ('-u','--user_email_address'):
-            email=a
-        elif o in ('-p','--project_name'):
-            userProject=a
-        else:
-            print("Usage3: %s -u 'user_email_address' -p 'project_name'" % sys.argv[0])
 
     UserStatusReport = {}
     userCounter = 0
@@ -370,10 +338,48 @@ def main():
 
     userCounter = userCounter + 1
     print userDetails
+    return userDetails
 
 #for key, value in UserStatusReport.iteritems():
 #    output = 'Email: '  + value[1][3] + '\t| Login: ' + value[1][2] + '\t| Password: ' + value[1][4] + '\t | Status: ' + value[0] + '\t | Project: ' + value[2]
 #    print output
+
+def main():
+    """Summary
+
+    Returns:
+        TYPE: Description
+    """
+    try:
+
+
+        # ensure minimium commandline paramaters have been supplied
+        if (len(sys.argv)<3):
+            print("Usage1: %s -u 'user_email_address' -p 'project_name'" % sys.argv[0])
+            sys.exit(2)
+
+        # load the command line parameters
+        myopts, args = getopt.getopt(sys.argv[1:],"u:p:",["user_email_address=","project_name="])
+    except getopt.GetoptError:
+        # if the parameters are incorrect display error message
+        print("Usage2: %s -u 'user_email_address' -p 'project_name'" % sys.argv[0])
+        sys.exit(2)
+
+    #tester = [('graham.land@uk.fujitsu.com','iCloud18')   ]
+    ###############################
+    # o == option
+    # a == argument passed to the o
+    ###############################
+    for o, a in myopts:
+        if o in ('-u','--user_email_address'):
+            email=a
+        elif o in ('-p','--project_name'):
+            userProject=a
+        else:
+            print("Usage3: %s -u 'user_email_address' -p 'project_name'" % sys.argv[0])
+
+    adduser_to_K5(email,userProject)
+
 
 if __name__ == "__main__":
     main()

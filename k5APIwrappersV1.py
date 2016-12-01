@@ -2,10 +2,14 @@
 """Summary
 """
 
-from k5contractsettingsV1 import *
+#from k5contractsettingsV1 import *
 import requests, datetime, string, os.path, sys, time
 from random import sample, choice
-
+from app import adminUser, adminPassword, contract, region
+global adminUser
+global adminPassword
+global contract
+global region
 
 def get_globally_scoped_token():
     """Get a global project scoped auth token
