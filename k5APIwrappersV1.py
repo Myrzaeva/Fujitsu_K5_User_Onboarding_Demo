@@ -80,8 +80,13 @@ def get_unscoped_token(adminUser,adminPassword,contract,region):
                                        "name":adminUser,
                                        "password": adminPassword
                             }}}}})
+    print response
+    print response.json()
 
-    return response.headers['X-Subject-Token']
+    if response.status_code == 201:
+      return response.headers['X-Subject-Token']
+    else:
+      return 'Authorisation Failure'
 
 def get_unscoped_idtoken(adminUser,adminPassword,contract,region):
     """Summary - get a central identity portal token may be same as global token???

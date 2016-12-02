@@ -3,11 +3,6 @@ from app import app
 import os
 import AddUserToProjectv2 as K5User
 import k5APIwrappersV1 as K5API
-#from k5contractsettingsV1 import *
-global adminUser
-global adminPassword
-global contract
-global region
 
 app.secret_key = os.urandom(24)
 
@@ -22,21 +17,17 @@ def index():
      contract = request.form.get('k5contract',None)
      region = request.form.get('k5region',None)
      print region
-     result = K5API.get_unscoped_token()
+     result = K5API.get_unscoped_token(adminUser,adminPassword,contract,region)
      print result
-     session['user'] =  request.form['k5username']
-     session['password'] = request.form['k5password']
-     session['contract'] = request.form['k5contract']
-     session['region'] = request.form['k5region']
-
-
-
-     if session['password']  == 'password':
+     if result != 'Authorisation Failure':
+       session['user'] =  request.form['k5username']
+       session['password'] = request.form['k5password']
+       session['contract'] = request.form['k5contract']
+       session['region'] = request.form['k5region']
        return redirect(url_for('adduser'))
      else:
        return render_template('hello-flask-login.html',
                            title='K5 Admin Portal (Beta)')
-
    else:
      return render_template('hello-flask-login.html',
                            title='K5 Admin Portal (Beta)')
