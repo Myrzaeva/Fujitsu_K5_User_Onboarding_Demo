@@ -119,9 +119,9 @@ def assign_user_to_group(adminUser,adminPassword,contract,region,username,groupn
         TYPE: Description
     """
     # if user exists return its id otherwise return 'None'
-    userid = get_itemid(get_keystoneobject_list('users'),username,'users')
+    userid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'users'),username,'users')
     # if group exists return its id otherwise return 'None'
-    groupid = get_itemid(get_keystoneobject_list('groups'),groupname,'groups')
+    groupid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'groups'),groupname,'groups')
    # modified this to be verified
     # the global rather than regional api is required to assign users to groups
     region = 'gls'
@@ -143,9 +143,9 @@ def assign_role_to_group_on_domain(adminUser,adminPassword,contract,region,group
         TYPE: Description
     """
     # if group exists return its id otherwisw return 'None'
-    groupid = get_itemid(get_keystoneobject_list('groups'),group,'groups')
+    groupid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'groups'),group,'groups')
     # if role exists return its id otherwise return 'None'
-    roleid = get_itemid(get_keystoneobject_list('roles'),role,'roles')
+    roleid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'roles'),role,'roles')
     # get a regional domain scoped token to make queries to facilitate conversion of object names to ids
     unscoped_k5token = get_unscoped_token()
     # the regional rather than global api is required for this call
@@ -167,11 +167,11 @@ def assign_role_to_user_and_project(adminUser,adminPassword,contract,region,user
         TYPE: Description
     """
     # if user exists return its id otherwise return 'None'
-    userid = get_itemid(get_keystoneobject_list('users'),username,'users')
+    userid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'users'),username,'users')
     # if project exists return its id otherwise return 'None'
-    projectid = get_itemid(get_keystoneobject_list('projects'),project,'projects')
+    projectid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'projects'),project,'projects')
     # if role exists return its id otherwise return 'None'
-    roleid = get_itemid(get_keystoneobject_list('roles'),role,'roles')
+    roleid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'roles'),role,'roles')
     # get a regional domain scoped token to make queries to facilitate conversion of object names to ids
     k5token = get_unscoped_token()
 
@@ -193,11 +193,11 @@ def assign_role_to_group_and_project(adminUser,adminPassword,contract,region,gro
         TYPE: Description
     """
     # if group exists return its id otherwise return 'None'
-    groupid = get_itemid(get_keystoneobject_list('groups'),group,'groups')
+    groupid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'groups'),group,'groups')
     # if project exists return its id otherwise return 'None'
-    projectid = get_itemid(get_keystoneobject_list('projects'),project,'projects')
+    projectid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'projects'),project,'projects')
     # if role exists return its id otherwise return 'None'
-    roleid = get_itemid(get_keystoneobject_list('roles'),role,'roles')
+    roleid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'roles'),role,'roles')
     # get a regional domain scoped token to make queries to facilitate conversion of object names to ids
     k5token = get_unscoped_token()
 
@@ -255,7 +255,7 @@ def create_new_group(adminUser,adminPassword,contract,region,project):
     return groupDetail['group']['name']
 
 # Gets generic keystone list of projects,users,roles or groups depending on the object type passed in to the call
-def get_keystoneobject_list(k5token,objecttype):
+def get_keystoneobject_list(k5token,region,contractid,objecttype):
     """Summary
 
     Args:
@@ -265,7 +265,7 @@ def get_keystoneobject_list(k5token,objecttype):
         TYPE: Description
     """
     # get a regional domain scoped token to list the objects
-    k5token = get_unscoped_token(adminUser,adminPassword,contract,region)
+    #k5token = get_unscoped_token(adminUser,adminPassword,contract,region)
 
     identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/' + objecttype + '?domain_id=' + contractid
     response = requests.get(identityURL,

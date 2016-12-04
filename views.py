@@ -3,15 +3,24 @@ from app import app
 import os
 import AddUserToProjectv2 as K5User
 import k5APIwrappersV1 as K5API
+from functools import wraps
 
 app.secret_key = os.urandom(24)
 
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session['token'] is None:
+            return redirect(url_for('index', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/login', methods=['GET','POST'])
 def index():
-
-
+   session['token'] = None
    if request.method == 'POST':
-     session.pop('user',None)
+
      adminUser =  request.form.get('k5username',None)
      adminPassword = request.form.get('k5password',None)
      contract = request.form.get('k5contract',None)
@@ -20,10 +29,7 @@ def index():
      result = K5API.get_unscoped_token(adminUser,adminPassword,contract,region)
      print result
      if result != 'Authorisation Failure':
-       session['user'] =  request.form['k5username']
-       session['password'] = request.form['k5password']
-       session['contract'] = request.form['k5contract']
-       session['region'] = request.form['k5region']
+       session['token'] = result
        return redirect(url_for('adduser'))
      else:
        return render_template('hello-flask-login.html',
@@ -34,9 +40,15 @@ def index():
 
 
 @app.route('/adduser',methods=['GET','POST'])
+@login_required
 def adduser():
   if request.method == 'POST':
     if request.form.get('AddUser', None) == "Add User":
+      #####
+      ##### STOPPED HERE
+      #######
+      ####### In the process of tokenising all the functions to avoid
+      ########## passing username and password
       return redirect(url_for('userstatus'))
     else:
       if request.form.get('Logout', None) == "Logout":
@@ -47,6 +59,7 @@ def adduser():
                            title='K5 Add User')
 
 @app.route('/userstatus',methods=['GET','POST'])
+@login_required
 def userstatus():
   if request.method == 'POST':
     if request.form.get('AddUser', None) == "Add Another User":
@@ -61,7 +74,8 @@ def userstatus():
                            userstatus = 'Put Results From New User Here!')
 
 @app.route('/logout')
+@login_required
 def logout():
    # remove the username from the session if it is there
-  session.pop('username', None)
+  session.pop('token', None)
   return redirect(url_for('index'))

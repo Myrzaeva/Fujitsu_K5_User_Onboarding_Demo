@@ -70,7 +70,7 @@ def adduser_to_K5(adminUser,adminPassword,contract,region,email,userProject):
     UserStatusReport = {}
     userCounter = 0
     userDetails = breakdown_user_from_email(email)
-    newuserid = get_itemid(adminUser,adminPassword,contract,region,get_keystoneobject_list(adminUser,adminPassword,contract,region,'users'),userDetails[2],'users')
+    newuserid = get_itemid(get_keystoneobject_list(adminUser,adminPassword,contract,region,'users'),userDetails[2],'users')
 
     # Check new user login is available, if not try adding '1' to it and testing again, repeat one more time for '2' before failing the user
     userStatus = False
@@ -115,7 +115,7 @@ def adduser_to_K5(adminUser,adminPassword,contract,region,email,userProject):
             # generate the default project name from the contract name
             defaultProject = contract + '-prj'
 
-            defaultProjectid = get_itemid(adminUser,adminPassword,contract,region,get_keystoneobject_list(adminUser,adminPassword,contract,region,'projects'),defaultProject,'projects')
+            defaultProjectid = get_itemid(get_keystoneobject_list(adminUser,adminPassword,contract,region,'projects'),defaultProject,'projects')
             if (defaultProjectid != 'None'):
                 result = assign_role_to_user_and_project(adminUser,adminPassword,contract,region,userDetails[2],defaultProject,'_member_')
                 portal_sync_delay = 0
@@ -160,14 +160,14 @@ def adduser_to_K5(adminUser,adminPassword,contract,region,email,userProject):
     # if user has been successfully added as _member_ to default project
     if userStatus:
         # get the project id - this will ne 'None' if the project does not exist
-        newProjectid = get_itemid(adminUser,adminPassword,contract,region,get_keystoneobject_list(adminUser,adminPassword,contract,region,'projects'),userProject,'projects')
+        newProjectid = get_itemid(get_keystoneobject_list(adminUser,adminPassword,contract,region,'projects'),userProject,'projects')
 
         # if the users project already exists
         if (newProjectid != 'None'):
             # build my 'standard' project group name
             userGroup = userProject + '_Admin'
             # get the group id - this will be set to 'None' if the group does not exist
-            defaultGroupid = get_itemid(adminUser,adminPassword,contract,region,get_keystoneobject_list(adminUser,adminPassword,contract,region,'groups'),userGroup,'groups')
+            defaultGroupid = get_itemid(get_keystoneobject_list(adminUser,adminPassword,contract,region,'groups'),userGroup,'groups')
 
             # if the user's group already exists
             if (defaultGroupid != 'None'):
