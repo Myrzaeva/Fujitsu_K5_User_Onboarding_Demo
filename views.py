@@ -1,8 +1,8 @@
 from flask import render_template, session, request, redirect, url_for
 from app import app
 import os
-import AddUserToProjectv2 as K5User
-import k5APIwrappersV1 as K5API
+import AddUserToProjectv3 as K5User
+import k5APIwrappersV3 as K5API
 from functools import wraps
 
 app.secret_key = os.urandom(24)
@@ -11,26 +11,38 @@ app.secret_key = os.urandom(24)
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if session['token'] is None:
+        if session['regionaltoken'] is None:
             return redirect(url_for('index', next=request.url))
         return f(*args, **kwargs)
     return decorated_function
 
 @app.route('/login', methods=['GET','POST'])
 def index():
-   session['token'] = None
+   session['regionaltoken'] = None
    if request.method == 'POST':
 
      adminUser =  request.form.get('k5username',None)
      adminPassword = request.form.get('k5password',None)
      contract = request.form.get('k5contract',None)
      region = request.form.get('k5region',None)
-     print region
-     result = K5API.get_unscoped_token(adminUser,adminPassword,contract,region)
-     print result
-     if result != 'Authorisation Failure':
-       session['token'] = result
-       return redirect(url_for('adduser'))
+     #print region
+     regional_token = K5API.get_unscoped_token(adminUser,adminPassword,contract,region)
+     global_token = K5API.get_unscoped_idtoken(adminUser,adminPassword,contract,region)
+     #print result
+     if regional_token != 'Authorisation Failure':
+       for role in regional_token.json()['token']['roles']:
+           if role['name'] == 'cpf_admin':
+
+             session['regionaltoken'] = regional_token.headers['X-Subject-Token']
+             session['globaltoken'] = global_token.headers['X-Access-Token']
+             session['contract'] = contract
+             session['contractid'] = regional_token.json()['token']['project']['domain'].get('id')
+             session['defaultprjid'] = regional_token.json()['token']['project'].get('id')
+             session['region'] = region
+             return redirect(url_for('adduser'))
+           else:
+             render_template('hello-flask-login.html',
+                           title='K5 Admin Portal (Beta)')
      else:
        return render_template('hello-flask-login.html',
                            title='K5 Admin Portal (Beta)')
@@ -49,6 +61,18 @@ def adduser():
       #######
       ####### In the process of tokenising all the functions to avoid
       ########## passing username and password
+      regionaltoken = session['regionaltoken']
+      globaltoken = session['globaltoken']
+      contractid = session['contractid']
+      region = session['region']
+      email = request.form.get('k5useremail',None)
+      userProject = request.form.get('k5project',None)
+      result = K5User.adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
+      if result != None:
+        print result
+        session['newuserlogin'] = result[2]
+        session['newuserpassword'] = result[4]
+
       return redirect(url_for('userstatus'))
     else:
       if request.form.get('Logout', None) == "Logout":
@@ -69,13 +93,16 @@ def userstatus():
         return redirect(url_for('logout'))
 
   if request.method == 'GET':
+    username = session['newuserlogin']
+    userpassword = session['newuserpassword']
     return render_template('hello-flask-result.html',
                            title='K5 New User Details',
-                           userstatus = 'Put Results From New User Here!')
+                           userstatus = 'Username : ' + username + ' | Password : ' + userpassword)
 
 @app.route('/logout')
 @login_required
 def logout():
    # remove the username from the session if it is there
-  session.pop('token', None)
+  session.pop('regionaltoken', None)
+  session.pop('globaltoken', None)
   return redirect(url_for('index'))
