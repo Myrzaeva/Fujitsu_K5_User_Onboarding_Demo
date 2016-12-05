@@ -171,14 +171,14 @@ def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
 
             # if the user's group already exists
             if (defaultGroupid != 'None'):
-                result = assign_user_to_group(regionaltoken,contractid,region,userDetails[2],userGroup)
+                result = assign_user_to_group(globaltoken,regionaltoken,contractid,region,userDetails[2],userGroup)
 
                 portal_sync_delay = 0
 
                 # added a retry/delay routine here to allow sychronisation time between central portal and K5 IaaS regional portal
                 while (portal_sync_delay < 4) and (result.status_code != 204):
                     time.sleep(5)
-                    result = assign_user_to_group(regionaltoken,contractid,region,userDetails[2],userGroup)
+                    result = assign_user_to_group(globaltoken,regionaltoken,contractid,region,userDetails[2],userGroup)
                     portal_sync_delay = portal_sync_delay + 1
                     status = 'Step 10 - User details not synced to IaaS portal - waiting 5 seconds before retrying up to 4 times - pause - Retry'
                     UserStatusReport[email] = status,userDetails,userProject
@@ -191,7 +191,7 @@ def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
                 UserStatusReport[email] = status,userDetails,userProject
                 userStatus = True
                 print status
-                newGroup = create_new_group(regionaltoken,contractid,region,userProject)
+                newGroup = create_new_group(globaltoken,contractid,region,userProject)
 
                 # if the new group was created successfully
                 if newGroup == (userProject + '_Admin'):
@@ -225,7 +225,7 @@ def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
                     UserStatusReport[email] = status,userDetails,userProject
                     print status
 
-                result = assign_user_to_group(regionaltoken,contractid,region,userDetails[2],newGroup)
+                result = assign_user_to_group(globaltoken,regionaltoken,contractid,region,userDetails[2],newGroup)
 
                 # if the new user was successfully assigned to the group
                 if (result.status_code == 204) and (userStatus):
@@ -261,7 +261,7 @@ def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
                 print status
 
             if userStatus:
-                newGroup = create_new_group(regionaltoken,contractid,region,userProject)
+                newGroup = create_new_group(globaltoken,contractid,region,userProject)
 
                 if newGroup == (userProject + '_Admin'):
                     userStatus = True
@@ -308,14 +308,14 @@ def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
                 UserStatusReport[email] = status,userDetails,userProject
 
                 # assign user to new group
-                result = assign_user_to_group(regionaltoken,contractid,region,userDetails[2],newGroup)
+                result = assign_user_to_group(globaltoken,regionaltoken,contractid,region,userDetails[2],newGroup)
 
                 portal_sync_delay = 0
 
                 # added a retry/delay routine here to allow sychronisation time between central portal and K5 IaaS regional portal
                 while (portal_sync_delay < 4) and (result.status_code != 204):
                     time.sleep(5)
-                    result = assign_user_to_group(regionaltoken,contractid,region,userDetails[2],newGroup)
+                    result = assign_user_to_group(globaltoken,regionaltoken,contractid,region,userDetails[2],newGroup)
                     portal_sync_delay = portal_sync_delay + 1
                     status = 'Step 25 - Attempt to Assigned User to Group  - pause, retrying....'
                     UserStatusReport[email] = status,userDetails,userProject

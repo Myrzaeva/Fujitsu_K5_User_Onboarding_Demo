@@ -27,14 +27,15 @@ def index():
      region = request.form.get('k5region',None)
      #print region
      regional_token = K5API.get_unscoped_token(adminUser,adminPassword,contract,region)
-     global_token = K5API.get_unscoped_idtoken(adminUser,adminPassword,contract,region)
+     defaultid = regional_token.json()['token']['project'].get('id')
+     global_token = K5API.get_globally_scoped_token(adminUser,adminPassword,contract,defaultid,region)
      #print result
      if regional_token != 'Authorisation Failure':
        for role in regional_token.json()['token']['roles']:
            if role['name'] == 'cpf_admin':
 
              session['regionaltoken'] = regional_token.headers['X-Subject-Token']
-             session['globaltoken'] = global_token.headers['X-Access-Token']
+             session['globaltoken'] = global_token.headers['X-Subject-Token']
              session['contract'] = contract
              session['contractid'] = regional_token.json()['token']['project']['domain'].get('id')
              session['defaultprjid'] = regional_token.json()['token']['project'].get('id')
@@ -56,11 +57,6 @@ def index():
 def adduser():
   if request.method == 'POST':
     if request.form.get('AddUser', None) == "Add User":
-      #####
-      ##### STOPPED HERE
-      #######
-      ####### In the process of tokenising all the functions to avoid
-      ########## passing username and password
       regionaltoken = session['regionaltoken']
       globaltoken = session['globaltoken']
       contractid = session['contractid']
@@ -87,7 +83,7 @@ def adduser():
 def userstatus():
   if request.method == 'POST':
     if request.form.get('AddUser', None) == "Add Another User":
-      return redirect(url_for('adduser'))
+      return redirect(url_for('logout'))
     else:
       if request.form.get('Logout', None) == "Logout":
         return redirect(url_for('logout'))
