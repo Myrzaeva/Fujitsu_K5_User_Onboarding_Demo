@@ -184,6 +184,22 @@ def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
                     UserStatusReport[email] = status,userDetails,userProject
                     print status
 
+                if result.status_code == 204:
+                    status = 'Step 10.1 - User Successfully Added to Group - Finish'
+                    userStatus = True
+                    UserStatusReport[email] = status,userDetails,userProject
+                    print status
+                    result = get_re_unscoped_token(regionaltoken,region)
+                    print "Rescoping at END"
+                    print result
+                    print result.headers
+                    print result.json()
+                else:
+                    status = 'Step 10.2 - Failed to Added User to Group - Finish'
+                    userStatus = False
+                    UserStatusReport[email] = status,userDetails,userProject
+                    print status
+
             # if the users group does not exist
             else:
                 # create a project admin group - enforce standards

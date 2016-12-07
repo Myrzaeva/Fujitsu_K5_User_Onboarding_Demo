@@ -6,11 +6,6 @@
 import requests, datetime, string, os.path, sys, time
 from random import sample, choice
 
-global adminUser
-global adminPassword
-global contract
-global region
-
 def get_globally_scoped_token(adminUser,adminPassword,contract,defaultid,region):
     """Get a global project scoped auth token
 
@@ -36,6 +31,35 @@ def get_globally_scoped_token(adminUser,adminPassword,contract,defaultid,region)
     return response
 #    return response.headers['X-Subject-Token']
 
+def get_globally_rescoped_token(globaltoken,defaultid):
+    """Get a global project scoped auth token
+
+    Returns:
+        STRING: Globally Scoped Project  Token
+    """
+    identityURL = 'https://identity.gls.cloud.global.fujitsu.com/v3/auth/tokens'
+    response = requests.post(identityURL,
+                             headers={'Content-Type': 'application/json','Accept':'application/json'},
+                             json={
+                                        "auth": {
+                                                     "identity": {
+                                                                       "methods": [
+                                                                                           "token"
+                                                                                         ],
+                                                                        "token": {
+                                                                                        "id": globaltoken
+                                                                                      }
+                                                                      },
+                                                      "scope": {
+                                                                      "project": {
+                                                                                        "id": defaultid
+                                                                                      }
+                                                                    }
+                                                   }
+                                      })
+    return response
+#    return response.headers['X-Subject-Token']
+
 
 def get_re_unscoped_token(k5token,region):
     """Get a regional project scoped auth token
@@ -43,10 +67,10 @@ def get_re_unscoped_token(k5token,region):
         STRING: Regionally Scoped Project  Token
     """
     print k5token
+    print region
     identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/auth/tokens'
-    response = requests.post(identityURL,
-                             headers={'Content-Type': 'application/json','Accept':'application/json'},
-                             json={
+    print identityURL
+    tokenbody = {
                               "auth": {
                                             "identity": {
                                                                "methods": [
@@ -57,7 +81,11 @@ def get_re_unscoped_token(k5token,region):
                                                                              }
                                                               },
                                             }
-                              })
+                              }
+    print tokenbody
+    response = requests.post(identityURL,
+                             headers={'Content-Type': 'application/json','Accept':'application/json'},
+                             json=tokenbody)
 
     if response.status_code == 201:
       #return response.headers['X-Subject-Token']
@@ -65,6 +93,8 @@ def get_re_unscoped_token(k5token,region):
       return response
     else:
       print "Rescope Failure"
+      print response
+      print response.headers
       return 'Re-authentication Failure'
 
 
@@ -235,7 +265,7 @@ def assign_role_to_user_and_project(k5token,contractid,region,username,project,r
     # if role exists return its id otherwise return 'None'
     roleid = get_itemid(get_keystoneobject_list(k5token,region,contractid,'roles'),role,'roles')
     # get a regional domain scoped token to make queries to facilitate conversion of object names to ids
-    k5token = get_unscoped_token()
+    #k5token = get_unscoped_token()
 
     identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + projectid + '/users/' + userid + '/roles/' + roleid
     response = requests.put(identityURL,
@@ -305,9 +335,7 @@ def create_new_group(global_k5token,contractid,region,project):
     """
     #k5token = get_globally_scoped_token(adminUser,adminPassword,contract,region)
     groupname = project + '_Admin'
-    print global_k5token
 
-    print groupname
     groupURL = 'https://identity.gls.cloud.global.fujitsu.com/v3/groups'
     response = requests.post(groupURL,
                              headers={'X-Auth-Token':global_k5token,'Content-Type': 'application/json'},
@@ -317,7 +345,7 @@ def create_new_group(global_k5token,contractid,region,project):
                                      "name": groupname
                                   }})
     groupDetail = response.json()
-    print groupDetail
+
     return groupDetail['group']['name']
 
 # Gets generic keystone list of projects,users,roles or groups depending on the object type passed in to the call
@@ -337,11 +365,7 @@ def get_keystoneobject_list(k5token,region,contractid,objecttype):
     response = requests.get(identityURL,
                             headers={'X-Auth-Token':k5token,'Content-Type': 'application/json','Accept':'application/json'})
 
-    print region
-    print objecttype
-    print contractid
-    print response
-    print response.json()
+
     return response.json()
 
 # get id from name in a list
@@ -402,25 +426,55 @@ def main():
     adminPassword = 'happybirthdaytome16'
     contract = 'YssmW1yI'
     region = 'uk-1'
+    defaultid = 'eadb882573ac40b1b101eac93009a313'
 
     k5unscopedtoken = get_unscoped_token(adminUser,adminPassword,contract,region)
     print "Unscoped token - " + str(k5unscopedtoken.headers['X-Subject-Token'])
-    for role in k5unscopedtoken.json()['token']['roles']:
-      if role['name'] == 'cpf_admin':
-        print "I'm an Administrator"
-      elif role['name'] == 'cpf_systemowner':
-        print "I'm a Domain Owner"
-      else:
-        print "I'm not worthy!!!"
+    #for role in k5unscopedtoken.json()['token']['roles']:
+      #if role['name'] == 'cpf_admin':
+        #print "I'm an Administrator"
+     # elif role['name'] == 'cpf_systemowner':
+      #  print "I'm a Domain Owner"
+      #else:
+       # print "I'm not worthy!!!"
 
-    print "\nRoles - " + str(k5unscopedtoken.json()['token']['roles'])
-    print "\nDefault Project Id - " + str(k5unscopedtoken.json()['token']['project'].get('id'))
-    print "\nDefault Contract Id - " + str(k5unscopedtoken.json()['token']['project']['domain'].get('id'))
-    k5rescopedtoken = get_rescoped_token(k5unscopedtoken.headers['X-Subject-Token'],'eadb882573ac40b1b101eac93009a313','uk-1')
-    print "Rescoped Project Token - " + str(k5rescopedtoken.headers['X-Subject-Token'])
-    k5unscopedtoken2 = get_re_unscoped_token(k5rescopedtoken.headers['X-Subject-Token'],'uk-1')
-    print "Re - Unscoped Token - " + str(k5unscopedtoken2.headers['X-Subject-Token'])
-    print k5unscopedtoken2.json()
+    #print "\nRoles - " + str(k5unscopedtoken.json()['token']['roles'])
+    #print "\nDefault Project Id - " + str(k5unscopedtoken.json()['token']['project'].get('id'))
+    #print "\nDefault Contract Id - " + str(k5unscopedtoken.json()['token']['project']['domain'].get('id'))
+    #k5rescopedtoken = get_rescoped_token(k5unscopedtoken.headers['X-Subject-Token'],'eadb882573ac40b1b101eac93009a313','uk-1')
+    #print "Rescoped Project Token - " + str(k5rescopedtoken.headers['X-Subject-Token'])
+
+    k5unscopedtoken2 = get_re_unscoped_token(k5unscopedtoken.headers['X-Subject-Token'],'uk-1')
+    oldunscopedtoken = k5unscopedtoken2.headers['X-Subject-Token']
+    print  "\n New Token " + oldunscopedtoken
+
+    k5unscopedtoken3 = get_re_unscoped_token(oldunscopedtoken,'uk-1')
+    oldunscopedtoken2 = k5unscopedtoken3.headers['X-Subject-Token']
+    print  "\n New Token 2 " + oldunscopedtoken2
+
+    #k5unscopedtoken4 = get_re_unscoped_token('1221534406584fd585371cdd218a7ae5','uk-1')
+    #oldunscopedtoken3 = k5unscopedtoken4.headers['X-Subject-Token']
+   # print  "\n New Token 2 " + oldunscopedtoken3
+    #for i in range(9):
+     #  print "\n\n New Unscoped Regional Token"
+      # newtoken = get_re_unscoped_token(oldunscopedtoken,'uk-1')
+       #print newtoken.headers['X-Subject-Token']
+       #oldtoken = newtoken.headers['X-Subject-Token']
+
+
+    #print "Re - Unscoped Token - " + str(k5unscopedtoken2.headers['X-Subject-Token'])
+    #print k5unscopedtoken2.json()
+   # print "\n\n"
+    #globaltoken = get_globally_scoped_token(adminUser,adminPassword,contract,defaultid,region)
+    #oldtoken = globaltoken.headers['X-Subject-Token']
+    #print globaltoken.headers['X-Subject-Token']
+    #for i in range(9):
+     # print "\n\n New Token"
+      #newtoken = get_globally_rescoped_token(oldtoken,defaultid)
+      #print newtoken.headers['X-Subject-Token']
+      #oldtoken = newtoken.headers['X-Subject-Token']
+
+
 
 
 
