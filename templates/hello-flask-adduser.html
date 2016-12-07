@@ -1,13 +1,24 @@
 {% extends "hello-flask-base.html" %}
 {% block content %}
  <form method="post">
-    <label for="k5useremail">User Email Address:</label>
-    <input id="k5useremail" name="k5useremail" type="text">
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+     <label for="k5useremail" class="label label-default" >User Email Address:</label>
+    <input id="k5useremail" name="k5useremail" class="form-control" type="text">
     <br/>
-    <label for="k5project">User Project:</label>
-    <input id="k5project" name="k5project" type="text">
+    <label for="k5project" class="label label-default" >User Project:</label>
+    <input id="k5project" name="k5project" class="form-control" type="text">
     <br/>
     <input name="AddUser" type="submit" class="btn btn-primary btn-large" value="Add User">
     <input name="Logout" type="submit" class="btn btn-primary btn-large" value="Logout">
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+</div>
+
 </form>
 {% endblock %}
