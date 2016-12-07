@@ -180,7 +180,7 @@ def get_unscoped_token(adminUser,adminPassword,contract,region):
     else:
       return 'Authentication Failure'
 
-def get_unscoped_idtoken(adminUser,adminPassword,contract,region):
+def get_unscoped_idtoken(adminUser,adminPassword,contract):
     """Summary - get a central identity portal token may be same as global token???
 
     Returns:
@@ -197,7 +197,7 @@ def get_unscoped_idtoken(adminUser,adminPassword,contract,region):
                                       "password": adminPassword
                             }}}}})
 
-    return response
+    return response.headers['X-Access-Token']
 
 
 def assign_user_to_group(global_token,regional_token,contractid,region,username,groupname):
@@ -389,7 +389,7 @@ def get_itemid(itemlist,itemname,itemtype):
     return itemid
 
 
-def add_new_user(globaltoken,contract,region,userDetails):
+def add_new_user(idtoken,contract,region,userDetails):
     """Summary
 
     Args:
@@ -402,7 +402,7 @@ def add_new_user(globaltoken,contract,region,userDetails):
     centralIdUrl = 'https://k5-apiportal.paas.cloud.global.fujitsu.com/API/v1/api/users'
 
     response = requests.post(centralIdUrl,
-                             headers={'Token':globaltoken,'Content-Type': 'application/json'},
+                             headers={'Token':idtoken,'Content-Type': 'application/json'},
                              json={"user_last_name":userDetails[1],
                                    "user_first_name":userDetails[0],
                                    "login_id":userDetails[2],

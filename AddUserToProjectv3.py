@@ -64,7 +64,7 @@ def breakdown_user_from_email(useremail):
     password = get_password()
     return (firstname,surname,username,useremail,password)
 
-def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject):
+def adduser_to_K5(idtoken,globaltoken,regionaltoken,contractid,contract,region,email,userProject):
 
 
     UserStatusReport = {}
@@ -91,7 +91,7 @@ def adduser_to_K5(globaltoken,regionaltoken,contractid,region,email,userProject)
         userStatus = True
 
         # make rest api call to add new user
-        result = add_new_user(globaltoken,contractid,region,userDetails)
+        result = add_new_user(idtoken,contractid,region,userDetails)
 
         # if the result from the above call is successful
         if result.status_code == 200:

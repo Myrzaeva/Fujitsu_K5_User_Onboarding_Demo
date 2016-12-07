@@ -62,6 +62,8 @@ def index():
             for role in regional_token.json()['token']['roles']:
                 if role['name'] == 'cpf_admin':
 
+                    session['adminUser'] = adminUser
+                    session['adminPassword'] = adminPassword
                     session['regionaltoken'] = regional_token.headers[
                         'X-Subject-Token']
                     session['globaltoken'] = global_token.headers[
@@ -89,15 +91,24 @@ def index():
 def adduser():
     if request.method == 'POST':
         if request.form.get('AddUser', None) == "Add User":
-            newtokens = reset_token_scope()
-            regionaltoken = newtokens[1]
-            globaltoken = newtokens[0]
+            adminUser = session['adminUser']
+            adminPassword = session['adminPassword']
+            contract = session['contract']
             contractid = session['contractid']
             region = session['region']
+            defaultprjid = session['defaultprjid']
+            regional_token = K5API.get_unscoped_token(
+            adminUser, adminPassword, contract, region)
+            global_token = K5API.get_globally_scoped_token(
+            adminUser, adminPassword, contract, defaultprjid, region)
+            id_token = K5API.get_unscoped_idtoken(adminUser,adminPassword,contract)
+
+            newregionaltoken = regional_token.headers['X-Subject-Token']
+            newglobaltoken = global_token.headers['X-Subject-Token']
             email = request.form.get('k5useremail', None)
             userProject = request.form.get('k5project', None)
-            result = K5User.adduser_to_K5(
-                globaltoken, regionaltoken, contractid, region, email, userProject)
+            result = K5User.adduser_to_K5(id_token,
+                newglobaltoken, newregionaltoken, contractid, contract, region, email, userProject)
             if result != None:
                 print result
                 session['newuserlogin'] = result[2]
