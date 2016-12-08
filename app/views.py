@@ -1,3 +1,12 @@
+#!/usr/bin/python
+"""Summary - Flask Views Used to Control/Wrap the web UI Around the Add User Python Script
+
+    Author: Graham Land
+    Date: 08/12/16
+    Twitter: @allthingsclowd
+    Github: https://github.com/allthingscloud
+    Blog: https://allthingscloud.eu
+"""
 from flask import render_template, session, request, redirect, url_for
 from app import app
 import os
@@ -8,6 +17,10 @@ from functools import wraps
 app.secret_key = os.urandom(24)
 
 def login_required(f):
+    """Summary - Decorator used to ensure that routes channeled through this function are authenticated already
+        Otherwise they're returned to the login screen
+
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if session['regionaltoken'] is None:
@@ -18,6 +31,9 @@ def login_required(f):
 
 @app.route('/login', methods=['GET', 'POST'])
 def index():
+    """Summary - Default login screen used to capture user login details and authenticate user session
+
+    """
     session['regionaltoken'] = None
     if request.method == 'POST':
         adminUser = request.form.get('k5username', None)
@@ -61,6 +77,11 @@ def index():
 @app.route('/adduser', methods=['GET', 'POST'])
 @login_required
 def adduser():
+    """Summary
+
+    Returns:
+        TYPE: Description
+    """
     if request.method == 'POST':
         if request.form.get('AddUser', None) == "Add User":
             adminUser = session['adminUser']
@@ -99,6 +120,11 @@ def adduser():
 @app.route('/userstatus', methods=['GET', 'POST'])
 @login_required
 def userstatus():
+    """Summary
+
+    Returns:
+        TYPE: Description
+    """
     if request.method == 'POST':
         if request.form.get('AddUser', None) == "Add Another User":
             return redirect(url_for('adduser'))
@@ -117,6 +143,11 @@ def userstatus():
 @app.route('/logout')
 @login_required
 def logout():
+    """Summary
+
+    Returns:
+        TYPE: Description
+    """
     # remove the username from the session if it is there
     session.pop('regionaltoken', None)
     session.pop('globaltoken', None)

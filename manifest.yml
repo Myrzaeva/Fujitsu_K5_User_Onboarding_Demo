@@ -1,0 +1,4 @@
+applications:
+- name: run
+  mem: 128M
+  disk: 128M

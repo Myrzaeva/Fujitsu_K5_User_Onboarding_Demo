@@ -72,7 +72,21 @@ def breakdown_user_from_email(useremail):
 
 
 def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract, region, email, userProject):
+    """Summary
 
+    Args:
+        idtoken (TYPE): Description
+        globaltoken (TYPE): Description
+        regionaltoken (TYPE): Description
+        contractid (TYPE): Description
+        contract (TYPE): Description
+        region (TYPE): Description
+        email (TYPE): Description
+        userProject (TYPE): Description
+
+    Returns:
+        TYPE: Description
+    """
     UserStatusReport = {}
     userCounter = 0
     userDetails = breakdown_user_from_email(email)
@@ -392,10 +406,6 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract, reg
     userCounter = userCounter + 1
     print userDetails
     return userDetails
-
-# for key, value in UserStatusReport.iteritems():
-#    output = 'Email: '  + value[1][3] + '\t| Login: ' + value[1][2] + '\t| Password: ' + value[1][4] + '\t | Status: ' + value[0] + '\t | Project: ' + value[2]
-#    print output
 
 
 def main():
