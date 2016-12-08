@@ -7,32 +7,6 @@ from functools import wraps
 
 app.secret_key = os.urandom(24)
 
-
-def reset_token_scope():
-    globaltoken = session['globaltoken']
-    regionaltoken = session['regionaltoken']
-    #contractid = session['contractid']
-    region = session['region']
-
-    defaultprjid = session['defaultprjid']
-    print "\n REGIONAL TOKEN : " + regionaltoken
-    print "\n GLOBAL TOKEN : " + globaltoken
-    print "\n REGION : " + region
-    print "\n DEFAULT ID : " + defaultprjid
-
-    fresh_regional_token = K5API.get_re_unscoped_token(regionaltoken,region)
-    print "\n\nRegional Token Scope Before User Add\n\n"
-    print fresh_regional_token.json()
-    fresh_global_token = K5API.get_globally_rescoped_token(globaltoken,defaultprjid)
-    print "\n\nGlobal Token Scope Before User Add\n\n"
-    print fresh_global_token.json()
-    freshregionaltoken = fresh_regional_token.headers['X-Subject-Token']
-    freshglobaltoken = fresh_global_token.headers['X-Subject-Token']
-    return [freshglobaltoken,freshregionaltoken]
-
-
-
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -46,18 +20,16 @@ def login_required(f):
 def index():
     session['regionaltoken'] = None
     if request.method == 'POST':
-
         adminUser = request.form.get('k5username', None)
         adminPassword = request.form.get('k5password', None)
         contract = request.form.get('k5contract', None)
         region = request.form.get('k5region', None)
-        # print region
         regional_token = K5API.get_unscoped_token(
             adminUser, adminPassword, contract, region)
         defaultid = regional_token.json()['token']['project'].get('id')
         global_token = K5API.get_globally_scoped_token(
             adminUser, adminPassword, contract, defaultid, region)
-        # print result
+
         if regional_token != 'Authorisation Failure':
             for role in regional_token.json()['token']['roles']:
                 if role['name'] == 'cpf_admin':
@@ -98,19 +70,19 @@ def adduser():
             region = session['region']
             defaultprjid = session['defaultprjid']
             regional_token = K5API.get_unscoped_token(
-            adminUser, adminPassword, contract, region)
+                adminUser, adminPassword, contract, region)
             global_token = K5API.get_globally_scoped_token(
-            adminUser, adminPassword, contract, defaultprjid, region)
-            id_token = K5API.get_unscoped_idtoken(adminUser,adminPassword,contract)
+                adminUser, adminPassword, contract, defaultprjid, region)
+            id_token = K5API.get_unscoped_idtoken(
+                adminUser, adminPassword, contract)
 
             newregionaltoken = regional_token.headers['X-Subject-Token']
             newglobaltoken = global_token.headers['X-Subject-Token']
             email = request.form.get('k5useremail', None)
             userProject = request.form.get('k5project', None)
             result = K5User.adduser_to_K5(id_token,
-                newglobaltoken, newregionaltoken, contractid, contract, region, email, userProject)
+                                          newglobaltoken, newregionaltoken, contractid, contract, region, email, userProject)
             if result != None:
-                print result
                 session['newuserlogin'] = result[2]
                 session['newuserpassword'] = result[4]
 
