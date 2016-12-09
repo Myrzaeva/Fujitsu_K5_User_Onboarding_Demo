@@ -1,0 +1,251 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Anaconda Python Builder",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Anaconda Python Builder",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 708.0,
+		"last_filter": "Package Control: ",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Snippet: ",
+				"Snippet: Function"
+			],
+			[
+				"",
+				"Anaconda: Autoformat PEP8 Errors"
+			],
+			[
+				"Pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 934.0
+	},
+	"console":
+	{
+		"height": 1002.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/grazzer/Dev/my-first-flask-app"
+	],
+	"file_history":
+	[
+		"/home/grazzer/.config/sublime-text-3/Packages/Python PEP8 Autoformat/pep8_autoformat.sublime-settings",
+		"/home/grazzer/.config/sublime-text-3/Packages/User/AutoDocstring.sublime-settings",
+		"/home/grazzer/.config/sublime-text-3/Packages/AutoDocstring/AutoDocstring.sublime-settings",
+		"/home/grazzer/Dev/my-first-flask-app/app/templates/hello-flask-adduser.html",
+		"/home/grazzer/Dev/my-first-flask-app/app/k5APIwrappersV3.py",
+		"/home/grazzer/Dev/my-first-flask-app/app/templates/hello-flask-login.html",
+		"/home/grazzer/Dev/my-first-flask-app/app/views.py",
+		"/home/grazzer/Dev/my-first-flask-app/app/AddUserToProjectv3.py",
+		"/home/grazzer/Dev/K5/addusers/Fujitsu_K5_Add_User_To_Project_V12.py",
+		"/home/grazzer/.config/sublime-text-3/Packages/Colorsublime/Colorsublime.sublime-settings",
+		"/home/grazzer/Dev/K5/addusers/addUsersv21SuccessfulProdRun13.py",
+		"/home/grazzer/Dev/my-first-flask-app/app/run.py",
+		"/home/grazzer/Dev/flask-keystone-sample/app.py",
+		"/home/grazzer/Dev/flask/flask/views.py",
+		"/home/grazzer/Downloads/hello-flask-login.html",
+		"/home/grazzer/Downloads/hello-flask-login/readme.html",
+		"/home/grazzer/Dev/K5/ImageUpload/k5contractsettings.py",
+		"/home/grazzer/Dev/K5/ImageUpload/ObjectStore.py",
+		"/home/grazzer/.config/sublime-text-3/Packages/GitGutter/GitGutter.sublime-settings",
+		"/home/grazzer/.config/sublime-text-3/Packages/User/GitGutter.sublime-settings",
+		"/home/grazzer/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings"
+	],
+	"find":
+	{
+		"height": 24.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"add",
+			"assign",
+			"keystone",
+			"rescope",
+			"contract,",
+			"get_keystoneobject_list(regionaltoken,contractid,region,",
+			"keyst",
+			"add_new_user(",
+			"(token,",
+			"get_keystoneobject_list(token,contract,",
+			"contract,",
+			"get_keystoneobject_list('",
+			"get_ke",
+			"get_itemid(adminUser,adminPassword,contract,region,"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"contractid,",
+			"get_keystoneobject_list(regionaltoken,region,contractid,",
+			"(regionaltoken,",
+			"get_keystoneobject_list(token,contractid,",
+			"contractid,",
+			"get_keystoneobject_list(k5token,region,contractid,'",
+			"get_itemid("
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 66.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 177.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "my-first-flask-app.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 1000.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 760.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 608.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

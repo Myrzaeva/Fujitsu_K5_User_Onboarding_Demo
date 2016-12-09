@@ -1,6 +1,6 @@
 #!/usr/bin/python
-"""Summary: User onboarding process focused example python based API request calls
-    for the Fujitsu K5 IaaS Platform
+"""Summary: User onboarding process focused example python based API request
+    calls for the Fujitsu K5 IaaS Platform
 
     Author: Graham Land
     Date: 08/12/16
@@ -12,20 +12,15 @@
 """
 
 import requests
-import datetime
-import string
-import os.path
-import sys
-import time
-from random import sample, choice
 
 
-def get_globally_scoped_token(adminUser, adminPassword, contract, defaultid, region):
+def get_globally_scoped_token(adminUser, adminPassword, contract,
+                              defaultid, region):
     """Get a global project scoped auth token
 
     Returns:
-        Python Object: Globally Project Scoped Object Containing a Catalog List in the Body
-
+        Python Object: Globally Project Scoped Object
+        Containing a Catalog List in the Body
 
     Args:
         adminUser (string): Administrative user name
@@ -52,6 +47,7 @@ def get_globally_scoped_token(adminUser, adminPassword, contract, defaultid, reg
                                      {"id": defaultid
                                       }}}})
     return response
+
 
 def get_globally_rescoped_token(globaltoken, defaultid):
     """Summary - Get a global project scoped auth token
@@ -85,6 +81,7 @@ def get_globally_rescoped_token(globaltoken, defaultid):
                                  }
                              })
     return response
+
 
 def get_re_unscoped_token(k5token, region):
     """Summary - Get a regional unscoped auth token
@@ -254,9 +251,10 @@ def get_unscoped_idtoken(adminUser, adminPassword, contract):
     return response.headers['X-Access-Token']
 
 
-def assign_user_to_group(global_token, regional_token, contractid, region, username, groupname):
-    """Summary - Assign a K5 user to a group - requires both global and regional tokens as we
-    work with both global and regional features
+def assign_user_to_group(global_token, regional_token, contractid, region,
+                         username, groupname):
+    """Summary - Assign a K5 user to a group - requires both global
+    and regional tokens as we work with both global and regional features
 
     Args:
         global_token (TYPE): globally scoped token
@@ -275,14 +273,13 @@ def assign_user_to_group(global_token, regional_token, contractid, region, usern
     # if group exists return its id otherwise return 'None'
     groupid = get_itemid(get_keystoneobject_list(
         regional_token, region, contractid, 'groups'), groupname, 'groups')
-   # modified this to be verified
-    # the global rather than regional api is required to assign users to groups
     region = 'gls'
     identityURL = 'https://identity.' + region + \
         '.cloud.global.fujitsu.com/v3/groups/' + groupid + '/users/' + userid
     # make the put rest request
-    response = requests.put(identityURL, headers={
-                            'X-Auth-Token': global_token, 'Content-Type': 'application/json'})
+    response = requests.put(identityURL,
+                            headers={'X-Auth-Token': global_token,
+                                     'Content-Type': 'application/json'})
     return response
 
 
@@ -310,11 +307,14 @@ def assign_role_to_group_on_domain(k5token, contractid, region, group, role):
         contractid + '/groups/' + groupid + '/roles/' + roleid
     # make the put rest api request
     response = requests.put(identityURL, headers={
-                            'X-Auth-Token': k5token, 'Content-Type': 'application/json', 'Accept': 'application/json'})
+                            'X-Auth-Token': k5token,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'})
     return response
 
 
-def assign_role_to_user_and_project(k5token, contractid, region, username, project, role):
+def assign_role_to_user_and_project(k5token, contractid, region, username,
+                                    project, role):
     """Summary - assign a role to a user and a project on K5
 
     Args:
@@ -340,10 +340,15 @@ def assign_role_to_user_and_project(k5token, contractid, region, username, proje
     identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + \
         projectid + '/users/' + userid + '/roles/' + roleid
     response = requests.put(identityURL,
-                            headers={'X-Auth-Token': k5token, 'Content-Type': 'application/json', 'Accept': 'application/json'})
+                            headers={
+                                'X-Auth-Token': k5token,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'})
     return response
 
-def assign_role_to_group_and_project(k5token, contractid, region, group, project, role):
+
+def assign_role_to_group_and_project(k5token, contractid, region, group,
+                                     project, role):
     """Summary - assign a role to a group and a project
 
     Args:
@@ -369,7 +374,10 @@ def assign_role_to_group_and_project(k5token, contractid, region, group, project
     identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + \
         projectid + '/groups/' + groupid + '/roles/' + roleid
     response = requests.put(identityURL,
-                            headers={'X-Auth-Token': k5token, 'Content-Type': 'application/json', 'Accept': 'application/json'})
+                            headers={
+                                'X-Auth-Token': k5token,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'})
     return response
 
 
@@ -389,7 +397,7 @@ def create_new_project(k5token, contractid, region, project):
     identityURL = 'https://identity.' + region + \
         '.cloud.global.fujitsu.com/v3/projects?domain_id=' + contractid
     response = requests.post(identityURL,
-                             headers={
+                            headers={
                                  'X-Auth-Token': k5token, 'Content-Type': 'application/json', 'Accept': 'application/json'},
                              json={"project":
                                    {"description": "Programatically created project",
@@ -413,7 +421,6 @@ def create_new_group(global_k5token, contractid, region, project):
     Returns:
         TYPE: New Group Name
     """
-    #k5token = get_globally_scoped_token(adminUser,adminPassword,contract,region)
     groupname = project + '_Admin'
 
     groupURL = 'https://identity.gls.cloud.global.fujitsu.com/v3/groups'
@@ -429,19 +436,18 @@ def create_new_group(global_k5token, contractid, region, project):
 
     return groupDetail['group']['name']
 
-#
-#
-
 
 def get_keystoneobject_list(k5token, region, contractid, objecttype):
-    """Summary - gets generic keystone list of projects,users,roles or groups depending
+    """Summary - gets generic keystone list of projects,users,roles
+    or groups depending
         on the object type passed in to the call
 
     Args:
         k5token (TYPE): K5 regional domain scoped token
         region (TYPE): K5 region
         contractid (TYPE): K5 Contract ID
-        objecttype (TYPE): openstack object type to base list upon...eg. groups/users/roles etc
+        objecttype (TYPE): openstack object type to base list upon...
+        eg. groups/users/roles etc
 
     Returns:
         TYPE: python list with results
@@ -450,9 +456,13 @@ def get_keystoneobject_list(k5token, region, contractid, objecttype):
     identityURL = 'https://identity.' + region + \
         '.cloud.global.fujitsu.com/v3/' + objecttype + '?domain_id=' + contractid
     response = requests.get(identityURL,
-                            headers={'X-Auth-Token': k5token, 'Content-Type': 'application/json', 'Accept': 'application/json'})
+                            headers={
+                                'X-Auth-Token': k5token,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'})
 
     return response.json()
+
 
 def get_itemid(itemlist, itemname, itemtype):
     """Summary - generic function to get id from name in a list
@@ -473,6 +483,7 @@ def get_itemid(itemlist, itemname, itemtype):
             break
     return itemid
 
+
 def add_new_user(idtoken, contract, region, userDetails):
     """Summary - K5 add a new user to the K5 central authentication portal
 
@@ -480,7 +491,8 @@ def add_new_user(idtoken, contract, region, userDetails):
         idtoken (TYPE): Identity Scoped Token
         contract (TYPE): K5 contract name
         region (TYPE): K5 region
-        userDetails (TYPE): python Tuple containing user details eg. {firstname,lastname,username,email,password}
+        userDetails (TYPE): python Tuple containing user details ..
+        eg. {firstname,lastname,username,email,password}
 
     Returns:
         TYPE: http response object
@@ -502,13 +514,16 @@ def add_new_user(idtoken, contract, region, userDetails):
                                    })
     return response
 
+
 def main():
-    """Summary - deliberately left blank - I usually test all my functions here before using the module for import!
+    """Summary - deliberately left blank -
+    I usually test all my functions here before using the module for import!
 
     Returns:
         TYPE: Description
     """
     pass
+
 
 if __name__ == "__main__":
     main()
