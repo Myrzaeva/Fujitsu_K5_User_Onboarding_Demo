@@ -1,4 +1,4 @@
-# Fujitsu K5 Example User On Boarding APIs
+# Fujitsu K5 Example User OnBoarding APIs
 Platform: Fujitsu K5 IaaS
 Project to hold my OpenStack K5 Python 2.7 API Scripts integrated with Flask 
 
