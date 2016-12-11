@@ -51,10 +51,10 @@ def index():
             global_token = K5API.get_globally_scoped_token(
              adminUser, adminPassword, contract, defaultid, region)
 
-            if regional_token != 'Authorisation Failure':
+            if not isinstance(regional_token, str):
+                print "Got this far!!"
                 for role in regional_token.json()['token']['roles']:
                     if role['name'] == 'cpf_admin':
-
                         session['adminUser'] = adminUser
                         session['adminPassword'] = adminPassword
                         session['regionaltoken'] = regional_token.headers[
@@ -67,18 +67,18 @@ def index():
                         session['defaultprjid'] = regional_token.json()['token'][
                             'project'].get('id')
                         session['region'] = region
+
                         return redirect(url_for('adduser'))
-                    else:
-                        render_template('hello-flask-login.html',
-                                        title='K5 Admin Portal (Beta)')
 
             else:
                 return render_template('hello-flask-login.html',
                                        title='K5 Admin Portal (Beta)')
         except:
-            render_template('hello-flask-login.html',
-                            title='K5 Admin Portal (Beta)')
+
+            return render_template('hello-flask-login.html',
+                                   title='K5 Admin Portal (Beta)')
     else:
+
         return render_template('hello-flask-login.html',
                                title='K5 Admin Portal (Beta)')
 
@@ -121,13 +121,16 @@ def adduser():
                                               region,
                                               email,
                                               userProject)
+                print result
             except:
                 return render_template('hello-flask-login.html',
                                        title='K5 Admin Portal (Beta)')
 
             if result is not None:
+                print result
                 session['newuserlogin'] = result[2]
                 session['newuserpassword'] = result[4]
+                session['newuserstatus'] = result[5]
 
             return redirect(url_for('userstatus'))
         else:
@@ -155,9 +158,10 @@ def userstatus():
     if request.method == 'GET':
         username = session['newuserlogin']
         userpassword = session['newuserpassword']
+        userstatus = session['newuserstatus']
         return render_template('hello-flask-result.html',
                                title='K5 New User Details',
-                               userstatus=('Username : ' +
+                               userstatus=('Status : ' + userstatus + ' | Username : ' +
                                            username +
                                            ' | Password : ' +
                                            userpassword))

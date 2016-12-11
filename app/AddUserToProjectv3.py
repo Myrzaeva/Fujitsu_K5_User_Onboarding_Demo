@@ -75,7 +75,8 @@ def breakdown_user_from_email(useremail):
     firstname = useremail[:firstnameEnd]
     username = (useremail[firstnameEnd + 1:surnameEnd] + useremail[:1]).lower()
     password = get_password()
-    return (firstname, surname, username, useremail, password)
+    status = 'username and password generated'
+    return (firstname, surname, username, useremail, password, status)
 
 
 def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
@@ -106,14 +107,17 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
     userStatus = False
     status = 'Step 1 - Initialise ...'
     UserStatusReport[email] = status, userDetails, userProject
+    userDetails = (userDetails[0], userDetails[1], userDetails[2],
+                   userDetails[3], userDetails[4], status)
     print status
 
     # if the username already exist warn and carry on
     if (newuserid != 'None'):
         userStatus = True
         status = 'Step 2 - User Login name already exists - Will add existing User to Project ...'
-        userDetails = (userDetails[0], userDetails[1], userDetails[
-                       2], userDetails[3], "ExistingUserAddedToProject")
+        userDetails = (userDetails[0], userDetails[1],
+                       userDetails[2], userDetails[3],
+                       "ExistingUserAddedToProject", status)
         UserStatusReport[email] = status, userDetails, userProject
         print status
 
@@ -129,6 +133,9 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
             userStatus = True
             status = 'Step 3 - User Added to Portal - continue ...'
             UserStatusReport[email] = status, userDetails, userProject
+            userDetails = (userDetails[0], userDetails[1],
+                           userDetails[2], userDetails[3],
+                           userDetails[4], status)
             print status
 
         # if the add new user api call failed report and exit
@@ -136,7 +143,11 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
             userStatus = False
             status = 'Step 4 - Failed to Add User to Portal - Error, STOP!'
             UserStatusReport[email] = status, userDetails, userProject
+            userDetails = (userDetails[0], userDetails[1],
+                           userDetails[2], userDetails[3],
+                           userDetails[4], status)
             print status
+            return userDetails
 
         # Assign _member_ role to user in default project
         # if user has been added to authentication portal successfully
@@ -161,6 +172,9 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     portal_sync_delay = portal_sync_delay + 1
                     status = 'Step 5 - User details not synced to IaaS portal - waiting 5 seconds before retrying up to 4 times - pause - retry ...'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
 
                 # if the user was successfully assigned the _member_ role in
@@ -175,20 +189,32 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = False
                     status = 'Step 7 - Unable to  Assign User Member Role - Error, STOP!'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
+                    return userDetails
             # Unable to locate default project
             else:
                 userStatus = False
                 status = 'Step 8 - Unable to locate default -prj project - stop and check contract details supplied...'
                 UserStatusReport[email] = status, userDetails, userProject
+                userDetails = (userDetails[0], userDetails[1],
+                               userDetails[2], userDetails[3],
+                               userDetails[4], status)
                 print status
+                return userDetails
 
         # if user has not been added to the central authentication portal
         # report and exit
         else:
             status = 'Step 9 - Failed to add user to Central Authentication Portal  - Error, Stop!'
             UserStatusReport[email] = status, userDetails, userProject
+            userDetails = (userDetails[0], userDetails[1],
+                           userDetails[2], userDetails[3],
+                           userDetails[4], status)
             print status
+            return userDetails
 
     # Check if new user's project exists, create if required then add user to group
     # if user has been successfully added as _member_ to default project
@@ -240,19 +266,29 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     portal_sync_delay = portal_sync_delay + 1
                     status = 'Step 10 - User details not synced to IaaS portal - waiting 5 seconds before retrying up to 4 times - pause - Retry'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
 
                 if result.status_code == 204:
                     status = 'Step 10.1 - User Successfully Added to Group - Finish'
                     userStatus = True
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
                     result = get_re_unscoped_token(regionaltoken, region)
                 else:
                     status = 'Step 10.2 - Failed to Added User to Group - Finish'
                     userStatus = False
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
+                    return userDetails
 
             # if the users group does not exist
             else:
@@ -261,14 +297,28 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                 UserStatusReport[email] = status, userDetails, userProject
                 userStatus = True
                 print status
+                userDetails = (userDetails[0], userDetails[1],
+                               userDetails[2], userDetails[3],
+                               userDetails[4], status)
                 newGroup = create_new_group(
                     globaltoken, contractid, region, userProject)
 
                 # if the new group was created successfully
                 if newGroup == (userProject + '_Admin'):
                     userStatus = True
+                    status = 'Step 11.1 - Successfully created new group - continue...'
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
+                    print status
                 else:
                     userStatus = False
+                    status = 'Step 11.2 - Failed to create new group - STOP...'
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
+                    print status
+                    return userDetails
 
                 result = assign_role_to_group_and_project(
                                         regionaltoken,
@@ -293,6 +343,9 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     portal_sync_delay = portal_sync_delay + 1
                     status = 'Step 12 - Attempt to Assign Role to Group and Project Failed  - pause for portal sync, retrying....'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
 
                 # if the new role was successfully assigned to the group and
@@ -301,6 +354,9 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = True
                     status = 'Step 13 - Successfully Assigned role to Group  - continue...'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
 
                 # failed to assign role to group
@@ -308,7 +364,11 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = False
                     status = 'Step 14 - Failed to Assign role to Group - STOP, ERROR!!'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
+                    return userDetails
 
                 result = assign_user_to_group(
                                         globaltoken,
@@ -323,6 +383,9 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = True
                     status = 'Step 15 - Successfully Added User to Group  - continue ...'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
 
                 # failed to add new group
@@ -330,7 +393,11 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = False
                     status = 'Step 16 - Failed to Add User to Group - Error, STOP!'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
+                    return userDetails
 
         # if user project does not exist then create everything!
         else:
@@ -346,12 +413,19 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                 userStatus = True
                 status = 'Step 17 - Project Created Successfully  - Status Good Continue....'
                 UserStatusReport[email] = status, userDetails, userProject
+                userDetails = (userDetails[0], userDetails[1],
+                               userDetails[2], userDetails[3],
+                               userDetails[4], status)
                 print status
             else:
                 userStatus = False
                 status = 'Step 18 - Project Create Failed  - Error, Stop!'
                 UserStatusReport[email] = status, userDetails, userProject
+                userDetails = (userDetails[0], userDetails[1],
+                               userDetails[2], userDetails[3],
+                               userDetails[4], status)
                 print status
+                return userDetails
 
             if userStatus:
                 newGroup = create_new_group(
@@ -361,12 +435,19 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = True
                     status = 'Step 19 - New Group Created Successfully  - Status Good Continue....'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
                 else:
                     userStatus = False
                     status = 'Step 20 - Group Create Failed  - Error, Stop!'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
+                    return userDetails
 
                 # assign role to new group and project
                 result = assign_role_to_group_and_project(
@@ -392,6 +473,9 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     portal_sync_delay = portal_sync_delay + 1
                     status = 'Step 21 - Attempt to Assigned Role to Group and Project  - pause for portal sync, retrying....'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
 
                 # if the new role was successfully assigned to the group and
@@ -400,6 +484,9 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = True
                     status = 'Step 22 - Successfully Assigned role to Group  - continue...'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
 
                 # failed to assign role to group
@@ -407,12 +494,19 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     userStatus = False
                     status = 'Step 23 - Failed to Assign role to Group - STOP, ERROR!!'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
+                    return userDetails
 
             if userStatus:
                 userStatus = False
                 status = 'Step 24 - Attempt to Assigned User to Group  - continue....'
                 UserStatusReport[email] = status, userDetails, userProject
+                userDetails = (userDetails[0], userDetails[1],
+                               userDetails[2], userDetails[3],
+                               userDetails[4], status)
 
                 # assign user to new group
                 result = assign_user_to_group(
@@ -439,27 +533,44 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     portal_sync_delay = portal_sync_delay + 1
                     status = 'Step 25 - Attempt to Assigned User to Group  - pause, retrying....'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
                 # check here for new group creation status
                 if result.status_code == 204:
                     userStatus = True
                     status = 'Step 26 - Assigned User Successfully  - Continue....'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
                 else:
                     userStatus = False
                     status = 'Step 27 - Failed to Assign User  - Error, Stop!'
                     UserStatusReport[email] = status, userDetails, userProject
+                    userDetails = (userDetails[0], userDetails[1],
+                                   userDetails[2], userDetails[3],
+                                   userDetails[4], status)
                     print status
+                    return userDetails
 
     # if user addition to default project failed
     else:
         status = 'Step 28 - Failed to assign Role to user - User Bad - Manually Complete User Addition'
         userStatus = False
         UserStatusReport[email] = status, userDetails, userProject
+        userDetails = (userDetails[0], userDetails[1],
+                       userDetails[2], userDetails[3],
+                       userDetails[4], status)
         print status
+        return userDetails
 
-    userCounter = userCounter + 1
+    status = 'Success'
+    userDetails = (userDetails[0], userDetails[1],
+                   userDetails[2], userDetails[3],
+                   userDetails[4], status)
     print userDetails
     return userDetails
 

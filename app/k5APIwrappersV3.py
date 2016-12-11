@@ -30,23 +30,26 @@ def get_globally_scoped_token(adminUser, adminPassword, contract,
         region (string): Unused, need to remove at a later date
     """
     identityURL = 'https://identity.gls.cloud.global.fujitsu.com/v3/auth/tokens'
-    response = requests.post(identityURL,
-                             headers={'Content-Type': 'application/json',
-                                      'Accept': 'application/json'},
-                             json={"auth":
-                                   {"identity":
-                                    {"methods": ["password"], "password":
-                                     {"user":
-                                        {"domain":
-                                         {"name": contract},
-                                         "name": adminUser,
-                                         "password": adminPassword
-                                         }}},
-                                    "scope":
-                                    {"project":
-                                     {"id": defaultid
-                                      }}}})
-    return response
+    try:
+        response = requests.post(identityURL,
+                                 headers={'Content-Type': 'application/json',
+                                          'Accept': 'application/json'},
+                                 json={"auth":
+                                         {"identity":
+                                          {"methods": ["password"], "password":
+                                           {"user":
+                                           {"domain":
+                                               {"name": contract},
+                                            "name": adminUser,
+                                            "password": adminPassword
+                                            }}},
+                                          "scope":
+                                          {"project":
+                                           {"id": defaultid
+                                           }}}})
+        return response
+    except:
+        return "Global Token Error"
 
 
 def get_globally_rescoped_token(globaltoken, defaultid):
@@ -60,27 +63,30 @@ def get_globally_rescoped_token(globaltoken, defaultid):
         defaultid (string): default projct id
     """
     identityURL = 'https://identity.gls.cloud.global.fujitsu.com/v3/auth/tokens'
-    response = requests.post(identityURL,
-                             headers={'Content-Type': 'application/json',
-                                      'Accept': 'application/json'},
-                             json={
-                                 "auth": {
-                                     "identity": {
-                                         "methods": [
-                                             "token"
-                                         ],
-                                         "token": {
-                                             "id": globaltoken
-                                         }
-                                     },
-                                     "scope": {
-                                         "project": {
-                                             "id": defaultid
+    try:
+        response = requests.post(identityURL,
+                                 headers={'Content-Type': 'application/json',
+                                          'Accept': 'application/json'},
+                                 json={
+                                     "auth": {
+                                         "identity": {
+                                             "methods": [
+                                                 "token"
+                                             ],
+                                             "token": {
+                                                 "id": globaltoken
+                                             }
+                                         },
+                                         "scope": {
+                                             "project": {
+                                                 "id": defaultid
+                                             }
                                          }
                                      }
-                                 }
-                             })
-    return response
+                                 })
+        return response
+    except:
+        return "Global Rescope Token Error"
 
 
 def get_re_unscoped_token(k5token, region):
@@ -107,15 +113,14 @@ def get_re_unscoped_token(k5token, region):
             },
         }
     }
-    response = requests.post(identityURL,
-                             headers={'Content-Type': 'application/json',
-                                      'Accept': 'application/json'},
-                             json=tokenbody)
-
-    if response.status_code == 201:
+    try:
+        response = requests.post(identityURL,
+                                 headers={'Content-Type': 'application/json',
+                                          'Accept': 'application/json'},
+                                 json=tokenbody)
         return response
-    else:
-        return 'Re-authentication Failure'
+    except:
+        return 'Regional Re-Scoping Failure'
 
 
 def get_rescoped_token(k5token, projectid, region):
@@ -131,31 +136,31 @@ def get_rescoped_token(k5token, projectid, region):
     """
     identityURL = 'https://identity.' + region + \
         '.cloud.global.fujitsu.com/v3/auth/tokens'
-    response = requests.post(identityURL,
-                             headers={'Content-Type': 'application/json',
-                                      'Accept': 'application/json'},
-                             json={
-                                 "auth": {
-                                     "identity": {
-                                         "methods": [
-                                             "token"
-                                         ],
-                                         "token": {
-                                             "id": k5token
-                                         }
-                                     },
-                                     "scope": {
-                                         "project": {
-                                             "id": projectid
+    try:
+        response = requests.post(identityURL,
+                                 headers={'Content-Type': 'application/json',
+                                          'Accept': 'application/json'},
+                                 json={
+                                     "auth": {
+                                         "identity": {
+                                             "methods": [
+                                                 "token"
+                                             ],
+                                             "token": {
+                                                 "id": k5token
+                                             }
+                                         },
+                                         "scope": {
+                                             "project": {
+                                                 "id": projectid
+                                             }
                                          }
                                      }
-                                 }
-                             })
+                                 })
 
-    if response.status_code == 201:
         return response
-    else:
-        return 'Re-authentication Failure'
+    except:
+        return 'Regional Project Rescoping Failure'
 
 
 def get_scoped_token(adminUser, adminPassword, contract, projectid, region):
@@ -173,24 +178,27 @@ def get_scoped_token(adminUser, adminPassword, contract, projectid, region):
     """
     identityURL = 'https://identity.' + region + \
         '.cloud.global.fujitsu.com/v3/auth/tokens'
-    response = requests.post(identityURL,
-                             headers={'Content-Type': 'application/json',
-                                      'Accept': 'application/json'},
-                             json={"auth":
-                                   {"identity":
-                                    {"methods": ["password"], "password":
-                                     {"user":
-                                      {"domain":
-                                       {"name": contract},
-                                       "name": adminUser,
-                                       "password": adminPassword
-                                       }}},
-                                       "scope":
-                                       {"project":
-                                        {"id": projectid
-                                         }}}})
+    try:
+        response = requests.post(identityURL,
+                                 headers={'Content-Type': 'application/json',
+                                          'Accept': 'application/json'},
+                                 json={"auth":
+                                       {"identity":
+                                        {"methods": ["password"], "password":
+                                         {"user":
+                                          {"domain":
+                                           {"name": contract},
+                                           "name": adminUser,
+                                           "password": adminPassword
+                                           }}},
+                                           "scope":
+                                           {"project":
+                                            {"id": projectid
+                                             }}}})
 
-    return response.headers['X-Subject-Token']
+        return response.headers['X-Subject-Token']
+    except:
+        return 'Regional Project Token Scoping Failure'
 
 
 def get_unscoped_token(adminUser, adminPassword, contract, region):
@@ -207,23 +215,22 @@ def get_unscoped_token(adminUser, adminPassword, contract, region):
     """
     identityURL = 'https://identity.' + region + \
         '.cloud.global.fujitsu.com/v3/auth/tokens'
-    response = requests.post(identityURL,
-                             headers={'Content-Type': 'application/json',
-                                      'Accept': 'application/json'},
-                             json={"auth":
-                                   {"identity":
-                                    {"methods": ["password"], "password":
-                                     {"user":
-                                        {"domain":
-                                         {"name": contract},
-                                            "name": adminUser,
-                                            "password": adminPassword
-                                         }}}}})
-
-    if response.status_code == 201:
+    try:
+        response = requests.post(identityURL,
+                                 headers={'Content-Type': 'application/json',
+                                          'Accept': 'application/json'},
+                                 json={"auth":
+                                       {"identity":
+                                        {"methods": ["password"], "password":
+                                         {"user":
+                                            {"domain":
+                                             {"name": contract},
+                                                "name": adminUser,
+                                                "password": adminPassword
+                                             }}}}})
         return response
-    else:
-        return 'Authentication Failure'
+    except:
+        return 'Regional Unscoped Token Failure'
 
 
 def get_unscoped_idtoken(adminUser, adminPassword, contract):
@@ -237,18 +244,21 @@ def get_unscoped_idtoken(adminUser, adminPassword, contract):
         adminPassword (TYPE): k5 password
         contract (TYPE): k5 contract
     """
-    response = requests.post('https://auth-api.jp-east-1.paas.cloud.global.fujitsu.com/API/paas/auth/token',
-                             headers={'Content-Type': 'application/json'},
-                             json={"auth":
-                                   {"identity":
-                                    {"password":
-                                     {"user":
-                                      {"contract_number": contract,
-                                       "name": adminUser,
-                                       "password": adminPassword
-                                       }}}}})
+    try:
+        response = requests.post('https://auth-api.jp-east-1.paas.cloud.global.fujitsu.com/API/paas/auth/token',
+                                 headers={'Content-Type': 'application/json'},
+                                 json={"auth":
+                                       {"identity":
+                                        {"password":
+                                         {"user":
+                                          {"contract_number": contract,
+                                           "name": adminUser,
+                                           "password": adminPassword
+                                           }}}}})
 
-    return response.headers['X-Access-Token']
+        return response.headers['X-Access-Token']
+    except:
+        return 'ID Token Failure'
 
 
 def assign_user_to_group(global_token, regional_token, contractid, region,
@@ -258,7 +268,7 @@ def assign_user_to_group(global_token, regional_token, contractid, region,
 
     Args:
         global_token (TYPE): globally scoped token
-        regional_token (TYPE): regionallly scoped token
+        regional_token (TYPE): regionallly scoped tokenailed to assign user to group
         contractid (TYPE): k5 contract id
         region (TYPE): k5 region
         username (TYPE): k5 user name to be added to group
@@ -267,20 +277,23 @@ def assign_user_to_group(global_token, regional_token, contractid, region,
     Returns:
         TYPE: http request object
     """
-    # if user exists return its id otherwise return 'None'
-    userid = get_itemid(get_keystoneobject_list(
-        regional_token, region, contractid, 'users'), username, 'users')
-    # if group exists return its id otherwise return 'None'
-    groupid = get_itemid(get_keystoneobject_list(
-        regional_token, region, contractid, 'groups'), groupname, 'groups')
-    region = 'gls'
-    identityURL = 'https://identity.' + region + \
-        '.cloud.global.fujitsu.com/v3/groups/' + groupid + '/users/' + userid
-    # make the put rest request
-    response = requests.put(identityURL,
-                            headers={'X-Auth-Token': global_token,
-                                     'Content-Type': 'application/json'})
-    return response
+    try:
+        # if user exists return its id otherwise return 'None'
+        userid = get_itemid(get_keystoneobject_list(
+            regional_token, region, contractid, 'users'), username, 'users')
+        # if group exists return its id otherwise return 'None'
+        groupid = get_itemid(get_keystoneobject_list(
+            regional_token, region, contractid, 'groups'), groupname, 'groups')
+        region = 'gls'
+        identityURL = 'https://identity.' + region + \
+            '.cloud.global.fujitsu.com/v3/groups/' + groupid + '/users/' + userid
+        # make the put rest request
+        response = requests.put(identityURL,
+                                headers={'X-Auth-Token': global_token,
+                                         'Content-Type': 'application/json'})
+        return response
+    except:
+        return 'Failed to assign user to group'
 
 
 def assign_role_to_group_on_domain(k5token, contractid, region, group, role):
@@ -296,21 +309,24 @@ def assign_role_to_group_on_domain(k5token, contractid, region, group, role):
     Returns:
         TYPE: http request object
     """
-    # if group exists return its id otherwisw return 'None'
-    groupid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'groups'), group, 'groups')
-    # if role exists return its id otherwise return 'None'
-    roleid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'roles'), role, 'roles')
-    # the regional rather than global api is required for this call
-    identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/domains/' + \
-        contractid + '/groups/' + groupid + '/roles/' + roleid
-    # make the put rest api request
-    response = requests.put(identityURL, headers={
-                            'X-Auth-Token': k5token,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'})
-    return response
+    try:
+        # if group exists return its id otherwisw return 'None'
+        groupid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'groups'), group, 'groups')
+        # if role exists return its id otherwise return 'None'
+        roleid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'roles'), role, 'roles')
+        # the regional rather than global api is required for this call
+        identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/domains/' + \
+            contractid + '/groups/' + groupid + '/roles/' + roleid
+        # make the put rest api request
+        response = requests.put(identityURL, headers={
+                                'X-Auth-Token': k5token,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'})
+        return response
+    except:
+        return 'Failed to assign role to group on domain'
 
 
 def assign_role_to_user_and_project(k5token, contractid, region, username,
@@ -328,23 +344,26 @@ def assign_role_to_user_and_project(k5token, contractid, region, username,
     Returns:
         TYPE: http request object
     """
-    # if user exists return its id otherwise return 'None'
-    userid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'users'), username, 'users')
-    # if project exists return its id otherwise return 'None'
-    projectid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'projects'), project, 'projects')
-    # if role exists return its id otherwise return 'None'
-    roleid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'roles'), role, 'roles')
-    identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + \
-        projectid + '/users/' + userid + '/roles/' + roleid
-    response = requests.put(identityURL,
-                            headers={
-                                'X-Auth-Token': k5token,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'})
-    return response
+    try:
+        # if user exists return its id otherwise return 'None'
+        userid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'users'), username, 'users')
+        # if project exists return its id otherwise return 'None'
+        projectid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'projects'), project, 'projects')
+        # if role exists return its id otherwise return 'None'
+        roleid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'roles'), role, 'roles')
+        identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + \
+            projectid + '/users/' + userid + '/roles/' + roleid
+        response = requests.put(identityURL,
+                                headers={
+                                    'X-Auth-Token': k5token,
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'})
+        return response
+    except:
+        return 'Failed to assign role to user and project'
 
 
 def assign_role_to_group_and_project(k5token, contractid, region, group,
@@ -362,23 +381,26 @@ def assign_role_to_group_and_project(k5token, contractid, region, group,
     Returns:
         TYPE: http request object
     """
-    # if group exists return its id otherwise return 'None'
-    groupid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'groups'), group, 'groups')
-    # if project exists return its id otherwise return 'None'
-    projectid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'projects'), project, 'projects')
-    # if role exists return its id otherwise return 'None'
-    roleid = get_itemid(get_keystoneobject_list(
-        k5token, region, contractid, 'roles'), role, 'roles')
-    identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + \
-        projectid + '/groups/' + groupid + '/roles/' + roleid
-    response = requests.put(identityURL,
-                            headers={
-                                'X-Auth-Token': k5token,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'})
-    return response
+    try:
+        # if group exists return its id otherwise return 'None'
+        groupid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'groups'), group, 'groups')
+        # if project exists return its id otherwise return 'None'
+        projectid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'projects'), project, 'projects')
+        # if role exists return its id otherwise return 'None'
+        roleid = get_itemid(get_keystoneobject_list(
+            k5token, region, contractid, 'roles'), role, 'roles')
+        identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + \
+            projectid + '/groups/' + groupid + '/roles/' + roleid
+        response = requests.put(identityURL,
+                                headers={
+                                    'X-Auth-Token': k5token,
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'})
+        return response
+    except:
+        return 'Failed to assign role to group and project'
 
 
 def create_new_project(k5token, contractid, region, project):
@@ -393,20 +415,22 @@ def create_new_project(k5token, contractid, region, project):
     Returns:
         TYPE: http response object
     """
-
-    identityURL = 'https://identity.' + region + \
-        '.cloud.global.fujitsu.com/v3/projects?domain_id=' + contractid
-    response = requests.post(identityURL,
-                            headers={
-                                 'X-Auth-Token': k5token, 'Content-Type': 'application/json', 'Accept': 'application/json'},
-                             json={"project":
-                                   {"description": "Programatically created project",
-                                    "domain_id": contractid,
-                                    "enabled": True,
-                                    "is_domain": False,
-                                    "name": project
-                                    }})
-    return response
+    try:
+        identityURL = 'https://identity.' + region + \
+            '.cloud.global.fujitsu.com/v3/projects?domain_id=' + contractid
+        response = requests.post(identityURL,
+                                headers={
+                                     'X-Auth-Token': k5token, 'Content-Type': 'application/json', 'Accept': 'application/json'},
+                                 json={"project":
+                                       {"description": "Programatically created project",
+                                        "domain_id": contractid,
+                                        "enabled": True,
+                                        "is_domain": False,
+                                        "name": project
+                                        }})
+        return response
+    except:
+        return 'Failed to create a new project'
 
 
 def create_new_group(global_k5token, contractid, region, project):
@@ -421,20 +445,23 @@ def create_new_group(global_k5token, contractid, region, project):
     Returns:
         TYPE: New Group Name
     """
-    groupname = project + '_Admin'
+    try:
+        groupname = project + '_Admin'
 
-    groupURL = 'https://identity.gls.cloud.global.fujitsu.com/v3/groups'
-    response = requests.post(groupURL,
-                             headers={'X-Auth-Token': global_k5token,
-                                      'Content-Type': 'application/json'},
-                             json={"group":
-                                   {"description": "auto-generated project",
-                                    "domain_id": contractid,
-                                    "name": groupname
-                                    }})
-    groupDetail = response.json()
+        groupURL = 'https://identity.gls.cloud.global.fujitsu.com/v3/groups'
+        response = requests.post(groupURL,
+                                 headers={'X-Auth-Token': global_k5token,
+                                          'Content-Type': 'application/json'},
+                                 json={"group":
+                                       {"description": "auto-generated project",
+                                        "domain_id": contractid,
+                                        "name": groupname
+                                        }})
+        groupDetail = response.json()
 
-    return groupDetail['group']['name']
+        return groupDetail['group']['name']
+    except:
+        return 'Failed to create new group'
 
 
 def get_keystoneobject_list(k5token, region, contractid, objecttype):
@@ -452,16 +479,18 @@ def get_keystoneobject_list(k5token, region, contractid, objecttype):
     Returns:
         TYPE: python list with results
     """
+    try:
+        identityURL = 'https://identity.' + region + \
+            '.cloud.global.fujitsu.com/v3/' + objecttype + '?domain_id=' + contractid
+        response = requests.get(identityURL,
+                                headers={
+                                    'X-Auth-Token': k5token,
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'})
 
-    identityURL = 'https://identity.' + region + \
-        '.cloud.global.fujitsu.com/v3/' + objecttype + '?domain_id=' + contractid
-    response = requests.get(identityURL,
-                            headers={
-                                'X-Auth-Token': k5token,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'})
-
-    return response.json()
+        return response.json()
+    except:
+        return 'Failed to get keystone object list'
 
 
 def get_itemid(itemlist, itemname, itemtype):
@@ -475,13 +504,16 @@ def get_itemid(itemlist, itemname, itemtype):
     Returns:
         TYPE: Description
     """
-    itemid = 'None'
+    try:
+        itemid = 'None'
 
-    for item in itemlist[itemtype]:
-        if (item.get('name') == itemname):
-            itemid = item.get('id')
-            break
-    return itemid
+        for item in itemlist[itemtype]:
+            if (item.get('name') == itemname):
+                itemid = item.get('id')
+                break
+        return itemid
+    except:
+        return 'Failed to get item id'
 
 
 def add_new_user(idtoken, contract, region, userDetails):
@@ -497,22 +529,25 @@ def add_new_user(idtoken, contract, region, userDetails):
     Returns:
         TYPE: http response object
     """
-    centralIdUrl = 'https://k5-apiportal.paas.cloud.global.fujitsu.com/API/v1/api/users'
+    try:
+        centralIdUrl = 'https://k5-apiportal.paas.cloud.global.fujitsu.com/API/v1/api/users'
 
-    response = requests.post(centralIdUrl,
-                             headers={'Token': idtoken,
-                                      'Content-Type': 'application/json'},
-                             json={"user_last_name": userDetails[1],
-                                   "user_first_name": userDetails[0],
-                                   "login_id": userDetails[2],
-                                   "user_description": "Automated Account Setup",
-                                   "mailaddress": userDetails[3],
-                                   "user_status": "1",
-                                   "password": userDetails[4],
-                                   "language_code": "en",
-                                   "role_code": "01"
-                                   })
-    return response
+        response = requests.post(centralIdUrl,
+                                 headers={'Token': idtoken,
+                                          'Content-Type': 'application/json'},
+                                 json={"user_last_name": userDetails[1],
+                                       "user_first_name": userDetails[0],
+                                       "login_id": userDetails[2],
+                                       "user_description": "Automated Account Setup",
+                                       "mailaddress": userDetails[3],
+                                       "user_status": "1",
+                                       "password": userDetails[4],
+                                       "language_code": "en",
+                                       "role_code": "01"
+                                       })
+        return response
+    except:
+        return 'Failed to add new user'
 
 
 def main():
