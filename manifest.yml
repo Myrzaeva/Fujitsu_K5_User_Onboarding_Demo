@@ -1,4 +1,4 @@
 applications:
-- name: run
-  mem: 128M
-  disk: 128M
+- name: K5OnBoarding
+  mem: 1G
+  disk: 256M

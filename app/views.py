@@ -32,6 +32,7 @@ def login_required(f):
     return decorated_function
 
 
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def index():
     """Summary - Default login screen used to capture user login details
@@ -72,15 +73,15 @@ def index():
 
             else:
                 return render_template('hello-flask-login.html',
-                                       title='K5 Admin Portal (Beta)')
+                                       title='K5 User Onboarding Demo (Beta)')
         except:
 
             return render_template('hello-flask-login.html',
-                                   title='K5 Admin Portal (Beta)')
+                                   title='K5 User Onboarding Demo (Beta)')
     else:
 
         return render_template('hello-flask-login.html',
-                               title='K5 Admin Portal (Beta)')
+                               title='K5 User Onboarding Demo (Beta)')
 
 
 @app.route('/adduser', methods=['GET', 'POST'])
@@ -106,7 +107,7 @@ def adduser():
                     adminUser, adminPassword, contract)
             except:
                 return render_template('hello-flask-login.html',
-                                       title='K5 Admin Portal (Beta)')
+                                       title='K5 User Onboarding Demo (Beta)')
 
             newregionaltoken = regional_token.headers['X-Subject-Token']
             newglobaltoken = global_token.headers['X-Subject-Token']
@@ -124,7 +125,7 @@ def adduser():
                 print result
             except:
                 return render_template('hello-flask-login.html',
-                                       title='K5 Admin Portal (Beta)')
+                                       title='K5 User Onboarding Demo (Beta)')
 
             if result is not None:
                 print result
