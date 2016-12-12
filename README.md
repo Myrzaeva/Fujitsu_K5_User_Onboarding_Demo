@@ -31,3 +31,7 @@ Installation
 - git clone <this repo>
 - cd app
 - cf push
+
+Next steps:
+- Flask enhancements : migrate to flask-login, WTF forms
+- Use tokens everywhere
