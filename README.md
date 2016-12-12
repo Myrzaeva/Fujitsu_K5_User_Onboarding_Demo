@@ -18,7 +18,7 @@ It has the following functionality :
 
 Installation
 (Ubuntu 14.04 with Python 2.7)
-- git clone <this repo>
+- git clone https://github.com/allthingsclowd/Fujitsu_K5_User_Onboarding_Demo
 - cd to the directory where requirements.txt is located.
 - activate your virtualenv.
 - run: pip install -r requirements.txt in your shell
@@ -28,7 +28,7 @@ Installation
 - navigate to http://localhost:5000/login
 
 (Cloud Foundry)
-- git clone <this repo>
+- git clone https://github.com/allthingsclowd/Fujitsu_K5_User_Onboarding_Demo
 - cd app
 - cf push
 
