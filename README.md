@@ -6,10 +6,15 @@ This is an example python flask application used to illustrate how to automate t
 of new users to Fujitsu's K5 platform via its APIs.
 
 It has the following functionality :
+
 (i) Add new user to existing group and project
+
 (ii) Add new user to new group and project
+
 (iii) Add existing user to an existing project
+
 (iv) Add existing user to new group and project
+
 
 Installation
 (Ubuntu 14.04 with Python 2.7)
