@@ -32,6 +32,9 @@ Installation
 - cd app
 - cf push
 
+Temporary URL where the demo app was active on K5 PaaS (you may be lucky!)
+https://k5onboarding.uk-1.cf-app.net/
+
 Next steps:
 - Flask enhancements : migrate to flask-login, WTF forms
 - Use tokens everywhere
