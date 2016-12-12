@@ -1,0 +1,4 @@
+applications:
+- name: K5OnBoarding
+  mem: 1G
+  disk: 256M
