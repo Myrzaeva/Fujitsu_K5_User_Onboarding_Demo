@@ -356,6 +356,7 @@ def assign_role_to_user_and_project(k5token, contractid, region, username,
             k5token, region, contractid, 'roles'), role, 'roles')
         identityURL = 'https://identity.' + region + '.cloud.global.fujitsu.com/v3/projects/' + \
             projectid + '/users/' + userid + '/roles/' + roleid
+
         response = requests.put(identityURL,
                                 headers={
                                     'X-Auth-Token': k5token,

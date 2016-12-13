@@ -17,6 +17,23 @@
 			}
 		},
 		{
+			"file": "/home/grazzer/Dev/my-first-flask-app/app/manifest.yml",
+			"settings":
+			{
+				"buffer_size": 58,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/grazzer/Dev/my-first-flask-app/app/requirements.txt",
+			"settings":
+			{
+				"buffer_size": 601,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "k5APIwrappersV3.py",
 			"settings":
 			{
@@ -47,7 +64,7 @@
 			"file": "views.py",
 			"settings":
 			{
-				"buffer_size": 7038,
+				"buffer_size": 7119,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -128,6 +145,7 @@
 	],
 	"file_history":
 	[
+		"/home/grazzer/Dev/K5/PurgeContract/PurgeContractv125.py",
 		"/home/grazzer/.config/sublime-text-3/Packages/Python PEP8 Autoformat/pep8_autoformat.sublime-settings",
 		"/home/grazzer/.config/sublime-text-3/Packages/User/AutoDocstring.sublime-settings",
 		"/home/grazzer/.config/sublime-text-3/Packages/AutoDocstring/AutoDocstring.sublime-settings",
@@ -152,7 +170,7 @@
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 132.0
 	},
 	"find_in_files":
 	{
@@ -204,7 +222,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -232,11 +250,67 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"file": "/home/grazzer/Dev/my-first-flask-app/app/manifest.yml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 58,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/grazzer/Dev/my-first-flask-app/app/requirements.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 601,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								437,
+								437
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/requirementstxt/requirementstxt.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
 					"file": "k5APIwrappersV3.py",
 					"semi_transient": false,
 					"settings":
@@ -262,11 +336,11 @@
 						"translation.y": 10329.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 4,
 					"file": "AddUserToProjectv3.py",
 					"semi_transient": false,
 					"settings":
@@ -303,11 +377,11 @@
 						"translation.y": 3369.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 5,
 					"file": "__init__.py",
 					"semi_transient": false,
 					"settings":
@@ -331,24 +405,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "views.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7038,
+						"buffer_size": 7119,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6639,
-								6639
+								2958,
+								2958
 							]
 						],
 						"settings":
@@ -358,10 +432,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4851.0,
+						"translation.y": 2090.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -400,7 +474,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 177.0
+		"height": 1007.0
 	},
 	"output.find_results":
 	{

@@ -123,7 +123,6 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
 
     # if the user name does not exist add the new user
     else:
-        userStatus = True
 
         # make rest api call to add new user
         result = add_new_user(idtoken, contractid, region, userDetails)
@@ -152,7 +151,6 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
         # Assign _member_ role to user in default project
         # if user has been added to authentication portal successfully
         if userStatus:
-
             # generate the default project name from the contract name
             defaultProject = contract + '-prj'
 
@@ -166,7 +164,7 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                 # added a retry/delay routine here to allow sychronisation time
                 # between central portal and K5 IaaS regional portal
                 while (portal_sync_delay < 4) and (result.status_code != 204):
-                    time.sleep(5)
+                    sleep(5)
                     result = assign_role_to_user_and_project(
                         regionaltoken, contractid, region, userDetails[2], defaultProject, '_member_')
                     portal_sync_delay = portal_sync_delay + 1
@@ -254,7 +252,7 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                 # added a retry/delay routine here to allow sychronisation time
                 # between central portal and K5 IaaS regional portal
                 while (portal_sync_delay < 4) and (result.status_code != 204):
-                    time.sleep(5)
+                    sleep(5)
                     result = assign_user_to_group(
                                                 globaltoken,
                                                 regionaltoken,
@@ -449,6 +447,7 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                     print status
                     return userDetails
 
+                print "555 - Getting to assign role to new group and project"
                 # assign role to new group and project
                 result = assign_role_to_group_and_project(
                                         regionaltoken,
