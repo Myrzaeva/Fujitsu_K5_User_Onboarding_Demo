@@ -46,7 +46,8 @@ var pack = d3.pack()
     .size([diameter - margin, diameter - margin])
     .padding(2);
 
-d3.json("https://objectstorage.uk-1.cloud.global.fujitsu.com/v1/AUTH_eadb882573ac40b1b101eac93009a313/Bubbles/Bubbles.json", function(error, root) {
+
+d3.json("/home/grazzer/Dev/my-first-flask-app/app/app/templates/Bubbles.json", function(error, root) {
   if (error) throw error;
 
   root = d3.hierarchy(root)
