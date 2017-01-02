@@ -8,14 +8,17 @@
     Github: https://github.com/allthingscloud
     Blog: https://allthingscloud.eu
 """
-from flask import render_template, session, request, redirect, url_for
+from flask import render_template, session, request, redirect, url_for, json
 from app import app
 import os
 import AddUserToProjectv3 as K5User
 import k5APIwrappersV3 as K5API
 from functools import wraps
+from k5APIwrappersV13 import upload_object_to_container, \
+                        view_items_in_storage_container, download_item_in_storage_container
 
 app.secret_key = os.urandom(24)
+
 
 
 def login_required(f):
@@ -53,7 +56,7 @@ def index():
              adminUser, adminPassword, contract, defaultid, region)
 
             if not isinstance(regional_token, str):
-                print "Got this far!!"
+                #print "Got this far!!"
                 for role in regional_token.json()['token']['roles']:
                     if role['name'] == 'cpf_admin':
                         session['adminUser'] = adminUser
@@ -68,6 +71,9 @@ def index():
                         session['defaultprjid'] = regional_token.json()['token'][
                             'project'].get('id')
                         session['region'] = region
+                        #print "Downloads"
+
+                        #print session['bubbles'].json()
 
                         return redirect(url_for('adduser'))
 
@@ -98,6 +104,7 @@ def adduser():
             contractid = session['contractid']
             region = session['region']
             defaultprjid = session['defaultprjid']
+
             try:
                 regional_token = K5API.get_unscoped_token(
                     adminUser, adminPassword, contract, region)
@@ -122,13 +129,13 @@ def adduser():
                                               region,
                                               email,
                                               userProject)
-                print result
+                #print result
             except:
                 return render_template('hello-flask-login.html',
                                        title='K5 User Onboarding Demo (Beta)')
 
             if result is not None:
-                print result
+                #print result
                 session['newuserlogin'] = result[2]
                 session['newuserpassword'] = result[4]
                 session['newuserstatus'] = result[5]
@@ -139,8 +146,20 @@ def adduser():
                 return redirect(url_for('logout'))
 
     if request.method == 'GET':
+        region = session['region']
+        defaultprjid = session['defaultprjid']
+        regionaltoken = session['regionaltoken']
+        report_bubbles = json.dumps(download_item_in_storage_container(
+                            regionaltoken,
+                            defaultprjid,
+                            "Bubbles",
+                            "Bubbles.json", region).json())
+        print "\n\n\nLoading JSON Details..................\n\n\n"
+        print "The actual JSON File.................."
+        print report_bubbles
         return render_template('hello-flask-adduser.html',
-                               title='K5 Add User')
+                               title='K5 Add User',
+                               bubbles=report_bubbles)
 
 
 @app.route('/userstatus', methods=['GET', 'POST'])
