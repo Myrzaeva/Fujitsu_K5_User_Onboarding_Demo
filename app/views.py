@@ -14,7 +14,7 @@ import os
 import AddUserToProjectv3 as K5User
 import k5APIwrappersV3 as K5API
 from functools import wraps
-from k5APIwrappersV13 import upload_object_to_container, \
+from k5APIwrappersV16 import upload_object_to_container, \
                         view_items_in_storage_container, download_item_in_storage_container
 
 app.secret_key = os.urandom(24)
@@ -79,15 +79,15 @@ def index():
 
             else:
                 return render_template('hello-flask-login.html',
-                                       title='K5 User Onboarding Demo (Beta)')
+                                       title='K5 Tech Talks Portal')
         except:
 
             return render_template('hello-flask-login.html',
-                                   title='K5 User Onboarding Demo (Beta)')
+                                   title='K5 Tech Talks Portal')
     else:
 
         return render_template('hello-flask-login.html',
-                               title='K5 User Onboarding Demo (Beta)')
+                               title='K5 Tech Talks Portal')
 
 
 @app.route('/adduser', methods=['GET', 'POST'])
@@ -114,7 +114,7 @@ def adduser():
                     adminUser, adminPassword, contract)
             except:
                 return render_template('hello-flask-login.html',
-                                       title='K5 User Onboarding Demo (Beta)')
+                                       title='K5 Tech Talks Portal')
 
             newregionaltoken = regional_token.headers['X-Subject-Token']
             newglobaltoken = global_token.headers['X-Subject-Token']
@@ -132,7 +132,7 @@ def adduser():
                 #print result
             except:
                 return render_template('hello-flask-login.html',
-                                       title='K5 User Onboarding Demo (Beta)')
+                                       title='K5 Tech Talks Portal')
 
             if result is not None:
                 #print result
@@ -153,12 +153,12 @@ def adduser():
                             regionaltoken,
                             defaultprjid,
                             "Bubbles",
-                            "Bubbles.json", region).json())
+                            "Inventory.json", region).json())
         print "\n\n\nLoading JSON Details..................\n\n\n"
         print "The actual JSON File.................."
         print report_bubbles
         return render_template('hello-flask-adduser.html',
-                               title='K5 Add User',
+                               title='Choose a tab below',
                                bubbles=report_bubbles)
 
 

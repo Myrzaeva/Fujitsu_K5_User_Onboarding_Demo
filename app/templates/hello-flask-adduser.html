@@ -21,7 +21,7 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4">
-                             <label for="k5useremail" class="label label-default" >User Email Address:</label>
+                             <label for="k6useremail" class="label label-default" >User Email Address:</label>
                             <input id="k5useremail" name="k5useremail" class="form-control" type="text">
                             <br/>
                             <label for="k5project" class="label label-default" >User Project:</label>
@@ -52,11 +52,11 @@
                           fill: white;
                         }
 
-                        .label {
-                          font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
-                          text-anchor: middle;
-                          text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
-                        }
+ /*                        .label {
+   font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+   text-anchor: middle;
+   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+ } */
 
                         .label,
                         .node--root,
@@ -88,6 +88,11 @@
 
                         root = JSON.parse('{{bubbles |safe}}');
 
+                        console.log("******************************* Getting here ****************************************");
+                        console.log(root);
+
+
+
                         root = d3.hierarchy(root)
                             .sum(function(d) { return d.size; })
                             .sort(function(a, b) { return b.value - a.value; });
@@ -100,7 +105,7 @@
                           .data(nodes)
                           .enter().append("circle")
                             .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
-                            .style("fill", function(d) { return d.children ? color(d.depth) : resourceColor(d.data.name) ; })
+                            .style("fill", function(d) { return d.children ? color(d.depth) : resourceColor(d.data.size) ; })
                             .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
 
                         var text = g.selectAll("text")
