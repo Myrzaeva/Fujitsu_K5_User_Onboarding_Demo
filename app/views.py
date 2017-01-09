@@ -152,8 +152,8 @@ def adduser():
         report_bubbles = json.dumps(download_item_in_storage_container(
                             regionaltoken,
                             defaultprjid,
-                            "Bubbles",
-                            "Inventory.json", region).json())
+                            "Inventory",
+                            "7015d1478a4c4bd7b970215d7b0260dd-20170109015743-Inventory.json", region).json())
         print "\n\n\nLoading JSON Details..................\n\n\n"
         print "The actual JSON File.................."
         print report_bubbles
