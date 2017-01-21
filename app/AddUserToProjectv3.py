@@ -219,6 +219,7 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
     if userStatus:
         # get the project id - this will ne 'None' if the project does not
         # exist
+        userStatus = False
         newProjectid = get_itemid(get_keystoneobject_list(
             regionaltoken, region, contractid, 'projects'), userProject, 'projects')
 
@@ -239,6 +240,7 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
 
             # if the user's group already exists
             if (defaultGroupid != 'None'):
+                print "Debug - Adding Existing User to Group"
                 result = assign_user_to_group(
                                             globaltoken,
                                             regionaltoken,
@@ -246,6 +248,7 @@ def adduser_to_K5(idtoken, globaltoken, regionaltoken, contractid, contract,
                                             region,
                                             userDetails[2],
                                             userGroup)
+                print "Assign User to Group response : ", result
 
                 portal_sync_delay = 0
 

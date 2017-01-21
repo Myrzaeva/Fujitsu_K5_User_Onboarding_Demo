@@ -48,9 +48,12 @@ def index():
         adminPassword = request.form.get('k5password', None)
         contract = request.form.get('k5contract', None)
         region = request.form.get('k5region', None)
+        print adminUser, adminPassword, contract, region
         try:
             regional_token = K5API.get_unscoped_token(
                 adminUser, adminPassword, contract, region)
+            print regional_token
+            print regional_token.json()
             defaultid = regional_token.json()['token']['project'].get('id')
             global_token = K5API.get_globally_scoped_token(
              adminUser, adminPassword, contract, defaultid, region)
@@ -149,11 +152,12 @@ def adduser():
         region = session['region']
         defaultprjid = session['defaultprjid']
         regionaltoken = session['regionaltoken']
-        report_bubbles = json.dumps(download_item_in_storage_container(
-                            regionaltoken,
-                            defaultprjid,
-                            "Bubbles",
-                            "Bubbles.json", region).json())
+        # report_bubbles = json.dumps(download_item_in_storage_container(
+        #                     regionaltoken,
+        #                     defaultprjid,
+        #                     "Bubbles",
+        #                     "Bubbles.json", region).json())
+        report_bubbles = [{ "name": "Test"}]
         print "\n\n\nLoading JSON Details..................\n\n\n"
         print "The actual JSON File.................."
         print report_bubbles

@@ -288,9 +288,11 @@ def assign_user_to_group(global_token, regional_token, contractid, region,
         identityURL = 'https://identity.' + region + \
             '.cloud.global.fujitsu.com/v3/groups/' + groupid + '/users/' + userid
         # make the put rest request
+        print "Debug: Assign USER URL : ", identityURL
         response = requests.put(identityURL,
                                 headers={'X-Auth-Token': global_token,
                                          'Content-Type': 'application/json'})
+        print "Debug : Add User Response : ", response
         return response
     except:
         return 'Failed to assign user to group'
