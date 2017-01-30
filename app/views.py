@@ -14,7 +14,7 @@ import os
 import AddUserToProjectv3 as K5User
 import k5APIwrappersV3 as K5API
 from functools import wraps
-from k5APIwrappersV16 import upload_object_to_container, \
+from k5APIwrappersV13 import upload_object_to_container, \
                         view_items_in_storage_container, download_item_in_storage_container
 
 app.secret_key = os.urandom(24)
@@ -82,15 +82,15 @@ def index():
 
             else:
                 return render_template('hello-flask-login.html',
-                                       title='K5 Tech Talks Portal')
+                                       title='K5 User Onboarding Demo (Beta)')
         except:
 
             return render_template('hello-flask-login.html',
-                                   title='K5 Tech Talks Portal')
+                                   title='K5 User Onboarding Demo (Beta)')
     else:
 
         return render_template('hello-flask-login.html',
-                               title='K5 Tech Talks Portal')
+                               title='K5 User Onboarding Demo (Beta)')
 
 
 @app.route('/adduser', methods=['GET', 'POST'])
@@ -117,7 +117,7 @@ def adduser():
                     adminUser, adminPassword, contract)
             except:
                 return render_template('hello-flask-login.html',
-                                       title='K5 Tech Talks Portal')
+                                       title='K5 User Onboarding Demo (Beta)')
 
             newregionaltoken = regional_token.headers['X-Subject-Token']
             newglobaltoken = global_token.headers['X-Subject-Token']
@@ -135,7 +135,7 @@ def adduser():
                 #print result
             except:
                 return render_template('hello-flask-login.html',
-                                       title='K5 Tech Talks Portal')
+                                       title='K5 User Onboarding Demo (Beta)')
 
             if result is not None:
                 #print result
@@ -152,25 +152,17 @@ def adduser():
         region = session['region']
         defaultprjid = session['defaultprjid']
         regionaltoken = session['regionaltoken']
-<<<<<<< HEAD
         # report_bubbles = json.dumps(download_item_in_storage_container(
         #                     regionaltoken,
         #                     defaultprjid,
         #                     "Bubbles",
         #                     "Bubbles.json", region).json())
         report_bubbles = [{ "name": "Test"}]
-=======
-        report_bubbles = json.dumps(download_item_in_storage_container(
-                            regionaltoken,
-                            defaultprjid,
-                            "Inventory",
-                            "7015d1478a4c4bd7b970215d7b0260dd-20170109015743-Inventory.json", region).json())
->>>>>>> 542cbdc4c23b92109d631816c47b1543c52fdb6a
         print "\n\n\nLoading JSON Details..................\n\n\n"
         print "The actual JSON File.................."
         print report_bubbles
         return render_template('hello-flask-adduser.html',
-                               title='Choose a tab below',
+                               title='K5 Add User',
                                bubbles=report_bubbles)
 
 
